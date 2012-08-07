@@ -1,10 +1,9 @@
 script(src='/js/clock.js')
+
 .container.base
 	#clock
 		.clockface
 		.timeLeft
-	#feedback
-		.container
 
 	#entry.form
 		.row-fluid
@@ -14,10 +13,10 @@ script(src='/js/clock.js')
 					option loading...
 			#newThing
 				btn.btn.btn-mini Specify
-			input#newEntry(type='text', placeholder='How did you spend your time?')
+			input#meaningEntry(type='text', placeholder='How did you spend your time?')
 			#timeEntry
-				input#hour.pull-left(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?
+				input#meaningDuration.pull-left(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?
 	')
 			btn#submit.btn.btn-primary.align-center Submit!
-	#success.well.hide
-		h3 Successful submission
+
+	#content

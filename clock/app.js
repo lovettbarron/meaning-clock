@@ -45,7 +45,7 @@ app.configure(function(){
 	app.use(express.session({ secret: '024493' }));
 //  app.use(app.router);
   app.use(express.static(__dirname + '/public'));
-	app.use(express.basicAuth('gobble','gobble')); // Setup password
+//	app.use(express.basicAuth('gobble','gobble')); // Setup password
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
