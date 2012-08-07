@@ -1,0 +1,80 @@
+body {
+}
+
+a {
+  color: #00B7FF;
+}
+
+.clockface {
+	text-align: center;
+	font-size: 2em;
+	line-height: 2.1em;
+	
+}
+
+#selection {
+	float: left;
+	clear: none;
+	margin-left: 0;
+	width: 70%;
+}
+
+#selection > select {
+	width: 100%;
+	overflow: hidden;
+}
+
+#newThing {
+	float:left;
+	clear: right;
+	width: 25%;
+}
+
+#newThing > btn {
+	width: 100%;
+	overflow: hidden;
+}
+
+#newEntry, #timeEntry {
+	width: 100%;
+}
+
+#timeEntry > span {
+	float: left;
+	clear: none;
+	width: 10%;
+}
+
+#timeEntry > input {
+	float: left;
+	clear: none;
+	width: 100%;
+}
+
+#submit {
+	width: 100%;
+	clear: both;
+	float: left;
+}
+
+.clockface > h3 {
+	font-size: .7em;
+	line-height: .8em;
+	font-weight: 300;
+}
+
+.flashOn {
+	color: gray;
+}
+
+.flashOff {
+	color: black;
+}
+
+#feedback {
+	color: #e3e3e3;
+}
+
+#entry {
+
+}

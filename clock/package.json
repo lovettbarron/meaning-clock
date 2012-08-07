@@ -1,0 +1,22 @@
+{
+    "name": "G3_Clock"
+	, "description": "A clock that tells meaningful time"
+	, "homepage": "http://gobble3.me/clock"
+	, "author": "Andrew Lovett-Barron (http://readywater.ca)"
+  , "version": "0.1.0"
+  , "private": true
+  , "engines": {
+    "node": "0.6.17"
+  }
+  , "dependencies": {
+    "express": "2.5.1"
+		, "connect": "1.8.1"
+		, "connect-mongodb": "1.1.1"
+		, "connect-timeout": "0.0.1"
+    , "jade": "0.18.0"
+    , "stylus": "0.18.0"
+    , "markdown": "0.3.1"
+    , "mailer": "0.6.7"
+		, "mongoose": "2.3.12"
+  }
+}

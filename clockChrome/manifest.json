@@ -1,0 +1,14 @@
+{
+  "name": "GGGClock",
+  "version": "0.1",
+  "manifest_version": 1,
+  "description": "Gobble Gobble Gobble",
+  "icons": { "128": "logo_big.png" },
+  "browser_action": {
+    "default_icon": "logo.png"
+    , "default_popup": "index.html"
+  },
+  "permissions": [
+    "http://gobble3.me/clock"
+  ]
+}

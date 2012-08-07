@@ -1,0 +1,24 @@
+!!!
+html
+	head
+		title G3Clock
+		meta(name="apple-mobile-web-app-capable", content="yes")
+		meta(name="viewport", content="width=device-width; initial-scale=1.0; user-scalable=0;")
+		meta(name="apple-mobile-web-app-status-bar-style", content="black")
+		link(rel='stylesheet', href='/css/bootstrap.css')
+		link(rel='stylesheet', href='/css/bootstrap-responsive.css')
+		link(rel='stylesheet', href='/css/style.css')
+		script(src='/js/jquery-1.7.1.min.js')
+		script(src='/js/init.js')
+	body
+		#container
+			#header
+				ul
+					li
+						h1
+							a(href='/') #{nameAndVersion(appName, version)}
+					- if (typeof currentUser !== 'undefined')
+						li.right
+							a#logout(href='/sessions') Log Out
+			!{flashMessages}
+			!= body

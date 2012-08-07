@@ -1,0 +1,22 @@
+script(src='/js/home.js')
+.container
+	.row-fluid(style='margin-bottom: 200px; margin-top: 100px')
+		.span12
+			h1(style='text-align: center;') Gobble Gobble Gobble
+			h6(style='text-align: center;') Toronto/NYC Design Collective
+	.row-fluid
+		.span6(style='text-align: right')
+			p G3 is 
+				a(href='https://twitter.com/zahraeb') Zahra Ebrahim 
+				|  and  
+				a(href='http://twitter.com/readywater') Andrew Lovett-Barron.
+			p We're building networked objects that enable more interesting lives.
+		.span6
+			p We need some help, could you give us a hand?
+			form.form.request
+				label Requested username
+					input#username(type='text', placeholder='gobble3.me/username')
+				label Your email
+					input#email(type='text', placeholder='your@email.com')
+				a#newRequest.btn.btn Sign up!
+			p.success Awesome, thanks! Our accounts are set up manually, and we'll do that for you soon. You'll get an email from one of us, and we can't wait to explore this space with you!
