@@ -1,3 +1,48 @@
+@media (max-width: 640px) {
+	body {
+		background-color: #313131;
+		padding: 0; margin: 0;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		overflow-x: hidden;
+	}
+
+	body > .container {
+		background: white;
+		width: 100%;
+		margin: 0; padding: 0;
+		opacity: 1.0;	
+	}
+	
+	.mobile {
+		display: block;
+	}
+	.fullsize {
+		display: none;
+	}
+}
+
+@media (min-width: 640px) {
+	body {
+		background-color: #313131;
+		padding: 0; margin: 0;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		overflow-x: hidden;
+	}
+
+	body > .container {
+		background: white;
+		max-width: 640px!;
+		padding: 10px;
+	}
+	
+	.mobile {
+		display: none;
+	}
+	.fullsize {
+		display: block;
+	}
+}
+
 body {
 	padding-top: 60px;
 }
@@ -11,15 +56,33 @@ a {
 }
 
 #footer {
-	
+	background: transparent;
+	height: 300px;
+	color: #fff;
+}
+
+#footer > div > div > h3 {
+	color: white;
+}
+
+.date {
+	font-size: .8em;
+	padding-right: 10px;
+	padding-left: 10px;
+	float: right;
+}
+
+ul {
+  list-style: none;
+	margin: 0; padding: 0;
 }
 
 li.meaning-item {
 	width: 100%;
 	font-size: 1.1em;
 	margin: 0;
-	padding: 3px;
-	border: ;
+	overflow: hidden;
+	padding: 0 3px;
 	height: 60px;
 	-webkit-user-select: none;
 	-webkit-transition: all .1s ease;
@@ -37,17 +100,28 @@ li.meaning-item {
 }
 
 #entry {
-	width: 100%;
-	padding: 10px;
-	margin: 0;
+	position: relative;
+	top: 60;
+	left: 0;
+	width: 100%!;
+	background: #eee;
+	padding: 0; margin: 0;
 	font-size: 18px;
 	font-weight: bold;
 	line-height: 58px;
 	text-align: left;
 	border-top: 1px solid rgba(255,255,255,.07);
 	border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+input {
+	background: transparent;
+	color: #000;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 10px;
+	margin: 10px;
 	position: relative;
-	background: #eee;
 }
 
 .clockface {
@@ -55,51 +129,6 @@ li.meaning-item {
 	font-size: 2em;
 	line-height: 2.1em;
 	
-}
-
-#selection {
-	float: left;
-	clear: none;
-	margin-left: 0;
-	width: 70%;
-}
-
-#selection > select {
-	width: 100%;
-	overflow: hidden;
-}
-
-#newThing {
-	float:left;
-	clear: right;
-	width: 25%;
-}
-
-#newThing > btn {
-	width: 100%;
-	overflow: hidden;
-}
-
-#newEntry, #timeEntry {
-	width: 100%;
-}
-
-#timeEntry > span {
-	float: left;
-	clear: none;
-	width: 10%;
-}
-
-#timeEntry > input {
-	float: left;
-	clear: none;
-	width: 100%;
-}
-
-#submit {
-	width: 100%;
-	clear: both;
-	float: left;
 }
 
 .clockface > h3 {

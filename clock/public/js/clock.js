@@ -8,7 +8,7 @@ Backbone.View.prototype.close = function () {
     this.unbind();
 };
 
-var clock;
+window.clock;
 function clockSetup() {
 	setInterval(function() {
 		var time = new Date();
@@ -23,7 +23,7 @@ function clockSetup() {
 		else { flash = 'Off'; }
 		left = 24 - time.getHours()
 		output = hour + '<span class="flash' + flash + '">:</span>' + min;
-		clock = output + '<h3>You have ' + left + ' hours in the day left.</h3>';
+		window.clock = output + '<h3>You have ' + left + ' hours in the day left.</h3>';
 	}, 100);
 }
 
@@ -52,6 +52,11 @@ function clockSetup() {
 		, toggle: function() {
 //      this.save({done: !this.get("done")});
     }
+		, validate: function(attrs) {
+			if(isNaN(attrs.duration)) {
+				return "Duration must be a number"
+			}
+		}
 		, clear: function() {
       this.destroy();
     }
@@ -69,10 +74,27 @@ function clockSetup() {
 		, initialize: function () {
 
 		}
+		, sortDays: function() {
+			
+		}
+		, colourStep: function() {
+			var iteration = 1000 / this.length;
+			return iteration;
+		}
+		, currentColour: function(cid) {
+			var _cid = parseInt(cid);
+			return parseInt( _cid * (1000 / this.length) );
+		}
+		, clearAll: function() {
+			this.reset();
+		}
+		, comparator: function(meaning) {
+			return meaning.get('date');
+		}
 	})
 	
 	var MeaningList = new MeaningCollection;
-	// 
+
 	// MeaningList.create({
 	// 	_id: null
 	// 	,date: new Date()
@@ -88,73 +110,22 @@ function clockSetup() {
 	// )
 //	fakeData.save();
 
-	/******************
-	* View to a model *
-	*******************/
- 	var MeaningView = Backbone.View.extend({
-		tagName: "li"
-
-	 	, template: _.template($('#meaning-item').html())
-	
-	 	, events: {
-	 		'click .delete' : 'remove'
-			, 'dblclick' : 'edit'
-			, 'mouseenter' : 'showOptions'
-			, 'mouseleave' : 'hideOptions'
-			, 'tap' : 'showOptions'
-	 	}
-	
-	 	, initialize: function() {
-      this.model.bind('change', this.render, this);
-      this.model.bind('destroy', this.remove, this);
-			this.hideOptions();
-	 	}
-	
-	 	, remove: function() {
-	 		alert('Delete this meaningful time?', function() {
-	 			this.destroy();
-	 		})
-	 	}	
-	
-		, showOptions: function() {
-			$(this.el).find('.delete').show();
-		}
-		, hideOptions: function() {
-			$(this.el).find('.delete').hide();
-		}
-		, edit: function() {
-			this.$el.addClass("editing");
-      this.input.focus();
-		}
-		
-	 	, render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      this.$el.toggleClass('done', this.model.get('done'));
-      this.input = this.$('.edit');
-      return this;
-	 	}
- })
 
 	/************************************************************
 					The animating clock that doesn't seem to animate
 	************************************************************/
 	var ClockView = Backbone.View.extend({
 		el: $('#clockFace')
-		
-		, template: _.template($('#clock').html())
-	
 		, events: {
 		}
 	
 		, initialize: function() {
-			this.clock = clock;
-
+			clockSetup();
+	  	$(this.el).html(window.clock.toString());
 		}
 		
 		, render: function() {
-			this.clock = clock;
-			console.log("Clock: " + this.clock)
-	  	$(this.el).html(this.template(this.clock));
+	  	$(this.el).html(window.clock.toString());
 			return this;
 		}
 	})
@@ -168,28 +139,37 @@ function clockSetup() {
 		, template: _.template($('#dataEntry').html())
 		, events: {
 			'click #submit' : 'saveEntry'
+			, 'keypress #durationEntry' : 'saveOnEnter'
 			, 'keypress #meaningEntry' : 'focusDuration'
-			, 'keypress #meaningDuration' : 'saveEntry'
+		//	, 'keypress #meaningDuration' : 'saveEntry'
 		}
 		
 		, initialize: function() {
 			$(this.el).html(this.template);
 		}
 		, saveEntry: function(e) {
-			if(e.keyCode == 13) {
-			var newEntry = MeaningList.create({
+		//	if(!this.input.val()) return;
+			MeaningList.create({
+					_id: null
+					, date: new Date()
+					, meaning: $('#meaningEntry').val()
+					, duration: $('#meaningDuration').val()
+				});
+	     	this.done();
+		}
+		, saveOnEnter: function(e) {
+			if(e.keyCode !== 13) return;
+		//	if(!this.input.val()) return;
+			MeaningList.create({
 				_id: null
 				, date: new Date()
 				, meaning: $('#meaningEntry').val()
 				, duration: $('#meaningDuration').val()
 			});
      	this.done();
-			//newEntry.save();
-		}
-			
 		}
 		, focusDuration: function(e) {
-			if(e.keyCode == 13 || e.mouseClick)
+			if(e.keyCode == 13)
 				$('#meaningDuration').focus();
 		}
 		, done: function() {
@@ -197,29 +177,111 @@ function clockSetup() {
 		}
 	})
 	
+	/******************
+	* View to a model *
+	*******************/
+ 	var MeaningView = Backbone.View.extend({
+		tagName: "li"
+
+	 	, template: _.template($('#meaning-item').html())
+
+	 	, events: {
+	 		'click .delete' : 'remove'
+			, 'dblclick' : 'edit'
+			, 'mouseenter' : 'showOptions'
+			, 'mouseleave' : 'hideOptions'
+			, 'tap' : 'showOptions'
+      , 'click a.destroy' : 'clear'
+      , 'keypress .edit'  : 'updateOnEnter'
+      , 'blur .edit'      : 'close'
+	 	}
+
+	 	, initialize: function() {
+      this.model.bind('change', this.render, this);
+      this.model.bind('destroy', this.remove, this);
+			this.setSize().setColour().hideOptions();
+	 	}
+
+	 	, remove: function() {
+	 		alert('Delete this meaningful time?', function() {
+	 			this.destroy();
+	 		})
+	 	}	
+		, setColour: function() {
+			var colour = MeaningList.currentColour(this.model.cid);
+			$(this.el).css({
+					'background-color':'hsl(' + (143+colour*10)+ ', 65%, 53%)',
+					'opacity': 1});
+			return this;
+		}
+		, setSize: function() {
+			$(this.el).css({
+				'height': (10 * Math.log( this.model.get('duration') + 1)) + 60
+			})
+			return this;
+		}
+		, showOptions: function() {
+			$(this.el).find('.delete').show();
+			return this;
+		}
+		, hideOptions: function() {
+			$(this.el).find('.delete').hide();
+			return this;
+		}
+		, edit: function() {
+			$(this.el).addClass("editing");
+      this.input.focus();
+		}
+    , close: function() {
+      var value = this.input.val();
+      if (!value) this.clear();
+      this.model.save({meaning: value});
+      $(this.el).removeClass("editing");
+    }
+		, clear: function() {
+      this.model.clear();
+		}
+    , updateOnEnter: function(e) {
+      if (e.keyCode == 13) this.close();
+    }
+		, remove: function() {
+			this.model.destroy();
+		}
+	 	, render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      this.input = this.$('.edit');
+      return this;
+	 	}
+ })
+	
 	/************************************************************
 					Primary application view and rendering
 	************************************************************/
 	var AppView = Backbone.View.extend({
 		el: $("#meaningClock")
+		
 		, events: {
 			'click .addOne' : 'enterMeaning'
+			, 'click .removeAll' : 'resetCollection'
 		}
 	
 		, initialize: function() {
-			clockSetup();
 			this.clockView = new ClockView();
 			
 	    MeaningList.bind('add', this.addOne, this);
       MeaningList.bind('reset', this.addAll, this);
       MeaningList.bind('all', this.render, this);
+			
 
 			MeaningList.fetch();
-			this.addAll();
 		}
 		
 		, enterMeaning: function() {
-			this.entryView = new DataEntryView();
+			if(!this.entryView)
+				this.entryView = new DataEntryView();
+			else {
+				this.entryView.initialize();
+			}
 		}
 		
 		, addOne: function(meaning) {
@@ -231,11 +293,14 @@ function clockSetup() {
       MeaningList.each(this.addOne);
     }
 
+		, resetCollection: function() {
+	 			alert('Remove test data?', function() {
+					MeaningList.reset();
+	 			})
+		}
+		
 		, render: function() {
 				console.log('Rendering AppView');
-				console.log(MeaningList.toJSON())
-				$(this.clockView.el).html(this.clockView.render());
-//				$(this.entryView.el).html(this.entryView.render());
 				return this;
 		}
 	});
