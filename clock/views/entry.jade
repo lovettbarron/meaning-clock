@@ -3,7 +3,9 @@ script(src='/js/clock.js')
 
 #meaningClock.container.base
 	#header
-		#clockFace
+		h1.title
+			#clockFace
+			The Meaning Clock
 		.menu
 			a.btn.addOne.pullRight.fullsize Add Meaningful Time
 			a.btn.addOne.pullRight.mobile + Meaning
@@ -12,10 +14,12 @@ script(src='/js/clock.js')
 
 	#footer
 		#people
+			p The Meaning clock reflects meaningful time back on you. There is only so much time to spend, so why not spend it meaningfully?
 			h3 GobbleGobbleGobble
 			p: a(href="http://relay.st") Relay Studio
 			p: a(href="http://architext.com") Architext
 		#debug
+			h3 Debugging panel
 			p: a.removeAll(href='#') Remove all
 <!-- templates -->
 script#meaning-list(type='text/template')

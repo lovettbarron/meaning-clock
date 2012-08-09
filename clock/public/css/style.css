@@ -1,9 +1,25 @@
+/***************************
+	Mobile!
+***************************/
 @media (max-width: 640px) {
 	body {
 		background-color: #313131;
 		padding: 0; margin: 0;
-		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		overflow-x: hidden;
+	}
+	
+	#clockFace {
+		display: block;
+	}
+	
+	#header {
+		height: 120px;
+	}
+	
+	#header > .menu {
+		display: inline;
+		width: 100%;
+		height: 60px;
 	}
 
 	body > .container {
@@ -13,6 +29,7 @@
 		opacity: 1.0;	
 	}
 	
+	
 	.mobile {
 		display: block;
 	}
@@ -21,7 +38,11 @@
 	}
 }
 
-@media (min-width: 640px) {
+
+/***************************
+	Smaller browser or tablet
+***************************/
+@media (min-width: 641px) {
 	body {
 		background-color: #313131;
 		padding: 0; margin: 0;
@@ -35,6 +56,20 @@
 		padding: 0px;
 	}
 	
+	#header {
+		height: 60px;
+	}
+	
+	#footer > div {
+		width: 45%; height: 100%;
+		padding: 20px;
+
+	}
+	
+	#header > .menu {
+		width: 150px;
+	}
+	
 	.mobile {
 		display: none;
 	}
@@ -42,9 +77,45 @@
 		display: block;
 	}
 }
+/***************************
+	Larger browser on a desktop, or larger tablet
+***************************/
+@media (min-width: 960px) {
+	body > .container {
+		width: 960px;
+	}
+
+	#footer {
+		display: block;
+		padding:0;margin:0;
+		height: 100%;
+		float: left;
+		clear: left;
+		width: 320px;
+	}
+	
+	#footer > div {
+		width: 90%;
+		padding: 5%;
+		float:none;
+		display: block;
+	}
+	
+	ul#meaningList {
+		float: right;
+		clear: right;
+		width: 640px;
+	}
+
+}
 
 body {
-	padding-top: 60px;
+	padding-top: 10px;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif !important;
+}
+
+h1,h2,h3,h4 {
+   font-family: Helvetica Neue, Helvetica, Arial;	
 }
 
 a {
@@ -52,34 +123,35 @@ a {
 }
 
 #header {
-	position: absolute;
-	top: 0; left;0
 	display: block;
-	height: 60px;
 	width: 100%;
 }
 
-#header > #clockface {
+#header > .title {
 	float: left;
-	padding: 10px 0;
-	margin: 10 0;
-	height: 100%;
+	clear: none;
+	color: white;
+}
+
+#clockFace {
+	display: inline;
+	font-size: 2em;
+	line-height: 1em;
+	padding: 0;margin:0;
 	width: 30%;
 }
 
 #header > .menu {
 	float: right;
 	clear: none;
-	width: 30%;
+	height: 100%;
 }
 
 #footer {
-	background: rgba(220,220,220,1);
-	height: 150px;
-	color: #fff;
+	color: #fff;;
 	border-top: 1px solid rgba(255,255,255,.07);
 	border-bottom: 1px solid rgba(0,0,0,.1);
-	
+	background: rgba(220,220,220,1);
 }
 
 .date {
@@ -169,15 +241,13 @@ input {
 }
 
 #people {
-	margin: 0;padding: 20px;
+	margin: 0;padding: 0px;
 	float: left; clear: none;
-	width: 45%;
-	
 }
 
+#people p { color: #0e0e0e}
+
 #debug {
-	margin: 0;padding: 20px;
+	margin: 0;padding: 0px;
 	float: left; clear: none;
-	width: 45%;
-	
 }

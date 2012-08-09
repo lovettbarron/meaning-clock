@@ -23,7 +23,9 @@ function clockSetup() {
 		else { flash = 'Off'; }
 		left = 24 - time.getHours()
 		output = hour + '<span class="flash' + flash + '">:</span>' + min;
-		window.clock = output + '<h3>You have ' + left + ' hours in the day left.</h3>';
+		window.clock = output;
+		// + '<h3>You have ' + left + ' hours in the day left.</h3>';
+  	$('#clockFace').html(window.clock);
 	}, 100);
 }
 
@@ -68,6 +70,7 @@ function clockSetup() {
 	var MeaningCollection = Backbone.Collection.extend({
 		
 		model: MeaningModel
+		
 		
 		, localStorage: new Backbone.LocalStorage("meaning-backbone")
 		//, url:"./act/",
@@ -128,12 +131,11 @@ function clockSetup() {
 	
 		, initialize: function() {
 			clockSetup();
-			this.render();
 		}
 		
 		, render: function() {
 			//alert(window.clock.toString())
-	  	$(this.el).html(window.clock);
+	  	$('#clockFace').html(window.clock);
 			return this;
 		}
 	})
@@ -226,7 +228,7 @@ function clockSetup() {
 		}
 		, setSize: function() {
 			$(this.el).css({
-				'height': (10 * Math.log( this.model.get('duration') + 1)) + 60
+				'height': (Math.log( this.model.get('duration'))*50) + 60
 			})
 			return this;
 		}
