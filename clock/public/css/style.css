@@ -1,8 +1,53 @@
 body {
+	padding-top: 60px;
 }
 
 a {
   color: #00B7FF;
+}
+
+#header {
+	
+}
+
+#footer {
+	
+}
+
+li.meaning-item {
+	width: 100%;
+	font-size: 1.1em;
+	margin: 0;
+	padding: 3px;
+	border: ;
+	height: 60px;
+	-webkit-user-select: none;
+	-webkit-transition: all .1s ease;
+	-webkit-perspective: 0;
+	-webkit-backface-visibility: hidden;
+	position: relative;
+	height: 58px;
+	padding: 0 10px;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 58px;
+	border-top: 1px solid rgba(255,255,255,.07);
+	border-bottom: 1px solid rgba(0,0,0,.1);
+	position: relative;
+}
+
+#entry {
+	width: 100%;
+	padding: 10px;
+	margin: 0;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 58px;
+	text-align: left;
+	border-top: 1px solid rgba(255,255,255,.07);
+	border-bottom: 1px solid rgba(0,0,0,.1);
+	position: relative;
+	background: #eee;
 }
 
 .clockface {
@@ -73,8 +118,4 @@ a {
 
 #feedback {
 	color: #e3e3e3;
-}
-
-#entry {
-
 }

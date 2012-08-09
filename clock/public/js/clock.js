@@ -72,20 +72,20 @@ function clockSetup() {
 	})
 	
 	var MeaningList = new MeaningCollection;
-
-	MeaningList.create({
-		_id: null
-		,date: new Date()
-		, meaning: "Meaning Test"
-		, duration: 1
-		}
-		, {
-			_id: null
-			,date: new Date()
-			, meaning: "Another test"
-			, duration: 2
-		}
-	)
+	// 
+	// MeaningList.create({
+	// 	_id: null
+	// 	,date: new Date()
+	// 	, meaning: "Meaning Test"
+	// 	, duration: 1
+	// 	}
+	// 	, {
+	// 		_id: null
+	// 		,date: new Date()
+	// 		, meaning: "Another test"
+	// 		, duration: 2
+	// 	}
+	// )
 //	fakeData.save();
 
 	/******************
@@ -99,19 +99,29 @@ function clockSetup() {
 	 	, events: {
 	 		'click .delete' : 'remove'
 			, 'dblclick' : 'edit'
+			, 'mouseenter' : 'showOptions'
+			, 'mouseleave' : 'hideOptions'
+			, 'tap' : 'showOptions'
 	 	}
 	
 	 	, initialize: function() {
       this.model.bind('change', this.render, this);
       this.model.bind('destroy', this.remove, this);
+			this.hideOptions();
 	 	}
 	
 	 	, remove: function() {
 	 		alert('Delete this meaningful time?', function() {
-	 			this.model.destroy();
+	 			this.destroy();
 	 		})
 	 	}	
 	
+		, showOptions: function() {
+			$(this.el).find('.delete').show();
+		}
+		, hideOptions: function() {
+			$(this.el).find('.delete').hide();
+		}
 		, edit: function() {
 			this.$el.addClass("editing");
       this.input.focus();
@@ -205,6 +215,7 @@ function clockSetup() {
       MeaningList.bind('all', this.render, this);
 
 			MeaningList.fetch();
+			this.addAll();
 		}
 		
 		, enterMeaning: function() {
@@ -213,7 +224,7 @@ function clockSetup() {
 		
 		, addOne: function(meaning) {
 			var view = new MeaningView({model: meaning});
-      $('ul#meaningList').append(view.render().el);
+      $('ul#meaningList').prepend(view.render().el);
 		}
 		
 		, addAll: function() {
@@ -224,7 +235,6 @@ function clockSetup() {
 				console.log('Rendering AppView');
 				console.log(MeaningList.toJSON())
 				$(this.clockView.el).html(this.clockView.render());
-				this.addAll();
 //				$(this.entryView.el).html(this.entryView.render());
 				return this;
 		}

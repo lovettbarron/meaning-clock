@@ -1,10 +1,19 @@
 script(src='/js/clock.js')
+
+
 #meaningClock.container.base
-	#clockFace
-	a.btn.addOne +
+	#header.navbar.navbar-fixed
+		.navbar-inner
+			.container
+				.pull-left
+					a.brand Meaning Clock
+				#clockFace.pull-right
+				.pull-right
+					a.btn.addOne.pullRight Add Meaningful Time
 	#entryFormAnchor
 	ul#meaningList
 
+	#footer
 
 <!-- templates -->
 script#meaning-list(type='text/template')
@@ -12,9 +21,8 @@ script#meaning-list(type='text/template')
 
 script#meaning-item(type='text/template')
 	li.meaning-item
-		<%= date %>
 		<%= meaning %> for <%= duration %>
-		a.delete x
+		a.btn.hide.delete.pull-right x
 
 script#clock(type='text/template')
 	#clock
@@ -23,14 +31,6 @@ script#clock(type='text/template')
 
 script#dataEntry(type='text/template')
 	#entry.form
-		.row-fluid
-			//h6 I spent time today doing
-			//#selection
-			//	select.pull-left
-			//		option loading...
-			//#newThing
-			//	btn.btn.btn-mini Specify
-			input#meaningEntry(type='text', placeholder='How did you spend your time?')
-			#timeEntry
-				input#meaningDuration.pull-left(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
-			a#submit.btn.btn-primary.align-center Submit!
+		input#meaningEntry(type='text', placeholder='How did you spend your time?')
+		input#meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
+		a#submit.btn.btn-primary Submit!
