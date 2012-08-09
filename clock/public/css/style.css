@@ -107,7 +107,14 @@ li.meaning-item {
 	-webkit-backface-visibility: hidden;
 	border-top: 1px solid rgba(255,255,255,.07);
 	border-bottom: 1px solid rgba(0,0,0,.1);
+}
 
+li.meaning-item > p {
+	padding: 10px;
+	color: #f0f0f0;
+	font-size: 1.1em;
+	font-weight: bold;
+	line-height: 1.2em;
 }
 
 #entry {

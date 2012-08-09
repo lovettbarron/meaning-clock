@@ -23,7 +23,8 @@ script#meaning-list(type='text/template')
 
 script#meaning-item(type='text/template')
 	li.meaning-item
-		<%= meaning %> for <%= duration %> hours
+		p
+			<%= meaning %> for <%= duration %> hours
 		.date.hide <%= date %>
 		input.edit(type="text").hide <%= meaning %>
 		a.btn.hide.delete.pull-right x
