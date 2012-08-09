@@ -87,6 +87,7 @@ function clockSetup() {
 				reverse=true;
 //			var _cid = parseInt(cid);
 			var index = cid.split('c')[1];
+			if(index > this.length+1) index = this.length+1;
 			console.log(index);
 			// This reverses the colour index
 			if(reverse) index = (this.length+1) - index+1;
@@ -208,6 +209,10 @@ function clockSetup() {
       this.model.bind('destroy', this.clear, this);
 			this.setSize().setColour().hideOptions();
 	 	}
+	
+		, blankCanvas: function() {
+			$(this.el).html('Why not do something meaningful today so you can post something!')
+		}
 
 		, setColour: function() {
 			var colour = MeaningList.currentColour(this.model.cid);
