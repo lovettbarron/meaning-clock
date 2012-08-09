@@ -54,6 +54,7 @@ function clockSetup() {
     }
 		, validate: function(attrs) {
 			if(isNaN(attrs.duration)) {
+				console.log("Duration must be a number")
 				return "Duration must be a number"
 			}
 		}
