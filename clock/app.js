@@ -18,8 +18,8 @@ var Schema = mongoose.Schema
 var entrySchema = new Schema({ 
 		'entry' : {
 			user: Number
-			, time: Date
-			, activity: String
+			, date: Date
+			, meaning: String
 			, duration: Number
 	}}), entry;
 
@@ -58,7 +58,7 @@ app.get('/', function(req, res){
   });
 });
 
-app.get('/clock/:userid', function(req, res){
+app.get('/clock/:userid?', function(req, res){
 	//Calls userfile
 	var query = Request.find( {'request.username': req.session.userid } );
 		query.exec(function(err,doc) {
@@ -83,7 +83,7 @@ app.get('/clock/:userid', function(req, res){
 		req.session.userid = 3;
 		console.log('Heather is logged in');
 		}
-//	else { req.session.userid = 0; }
+		else { console.log('Random user logged in, local only') }
 	
   res.render('entry', {
 		title: 'Clock'
@@ -116,14 +116,11 @@ app.post('/feedback', function(req, res) {
 		req.session.day[key].feedback = getDailyFeedback(req.session.days[key].today);
 	}
 	
-	
-	
-	
 	var response = { count : count, total: total, feedback: 'Testing feedback' };
 	res.json(response);
 });
 
-app.post('/act/:year?/:month?/:day?', function(req, res) {
+app.get('/clock/api', function(req, res) {
 	var response = {};
 	var getDate = {}
 	getDate.year = req.params.year;
@@ -173,13 +170,13 @@ app.post('/act/:year?/:month?/:day?', function(req, res) {
 			}); // End query
 });
 
-app.post('/entry', function(req, res) {
+app.post('/clock/api', function(req, res) {
 			var newEntry = new Entry();
 			newEntry.entry = {
 					"user": req.session.userid
 					, "duration" : req.body.duration
-					, "activity" : req.body.activity
-					, "time" : new Date()
+					, "meaning" : req.body.activity
+					, "date" : new Date()
 				};
 
 			newEntry.save( function(err) {
@@ -188,6 +185,16 @@ app.post('/entry', function(req, res) {
 					});
 });
 
+app.put('/clock/api', function(req,res) {
+	
+});
+
+app.delete('/clock/api', function(req,res) {
+
+});
+
+
+// Request account
 app.post('/request', function(req, res) {
 			var newEntry = new Request();
 			newEntry.request = {
