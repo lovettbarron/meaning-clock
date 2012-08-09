@@ -85,7 +85,7 @@ app.get('/clock/:userid', function(req, res){
 		}
 //	else { req.session.userid = 0; }
 	
-  res.render('user', {
+  res.render('entry', {
 		title: 'Clock'
     , user: req.session.userid
   });
@@ -166,10 +166,7 @@ app.post('/act/:year?/:month?/:day?', function(req, res) {
 							req.session.days[key].today = meaningCount;
 						}
 						
-						response = {
-							total: meaningCount
-							, resp: req.session.activity
-						}
+						response = req.session.activity;
 						
 						res.json( response );
 					} // Ends check for entries
