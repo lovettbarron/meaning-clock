@@ -16,8 +16,11 @@ script(src='/js/clock.js')
 		#people
 			p The Meaning clock reflects meaningful time back on you. There is only so much time to spend, so why not spend it meaningfully?
 			h3 GobbleGobbleGobble
-			p: a(href="http://relay.st") Relay Studio
-			p: a(href="http://architext.com") Architext
+			p G3 is a design collective making robots that give you soul food.
+			div
+				a(href="http://architext.com") Zahra 
+				b  + 
+				a(href="http://relay.st") Andrew
 		#debug
 			h3 Debugging panel
 			p: a.removeAll(href='#') Remove all
@@ -27,11 +30,11 @@ script#meaning-list(type='text/template')
 
 script#meaning-item(type='text/template')
 	li.meaning-item
+		a.btn.hide.delete.pull-right x
 		p
 			<%= meaning %> for <%= duration %> hours
 		.date.hide <%= date %>
 		input.edit(type="text").hide <%= meaning %>
-		a.btn.hide.delete.pull-right x
 
 script#clock(type='text/template')
 

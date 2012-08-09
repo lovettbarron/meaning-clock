@@ -60,9 +60,6 @@ function clockSetup() {
 				return "Duration must be a number"
 			}
 		}
-		, clear: function() {
-      this.destroy();
-    }
 
 	});
 
@@ -155,7 +152,8 @@ function clockSetup() {
 		}
 		
 		, initialize: function() {
-			$(this.el).html(this.template);
+//			$el.html(this.template);
+			$(this.el).hide().html(this.template).slideDown(700);
 		}
 		, saveOnClick: function(e) {
 		//	if(!this.input.val()) return;
@@ -182,7 +180,8 @@ function clockSetup() {
 				$('#meaningDuration').focus();
 		}
 		, done: function() {
-			this.remove();
+			$(this.el).slideUp(100);
+//			this.remove();
 		}
 	})
 	
@@ -195,32 +194,26 @@ function clockSetup() {
 	 	, template: _.template($('#meaning-item').html())
 
 	 	, events: {
-	 		'click .delete' : 'remove'
+	 		'click a.delete' : 'remove'
 			, 'dblclick' : 'edit'
 			, 'mouseenter' : 'showOptions'
 			, 'mouseleave' : 'hideOptions'
 			, 'tap' : 'showOptions'
-      , 'click a.destroy' : 'clear'
       , 'keypress .edit'  : 'updateOnEnter'
       , 'blur .edit'      : 'close'
 	 	}
 
 	 	, initialize: function() {
       this.model.bind('change', this.render, this);
-      this.model.bind('destroy', this.remove, this);
+      this.model.bind('destroy', this.clear, this);
 			this.setSize().setColour().hideOptions();
 	 	}
 
-	 	, remove: function() {
-	 		alert('Delete this meaningful time?', function() {
-	 			this.destroy();
-	 		})
-	 	}	
 		, setColour: function() {
 			var colour = MeaningList.currentColour(this.model.cid);
 			console.log('color:' + colour)
 			$(this.el).css({
-				'background-color':'hsl( 344, 70%, '
+				'background-color':'hsl( 154, 70%, '
 					+ ((MeaningList.currentColour(this.model.cid, false) / 100) * 30) +'%)'
 //					, 'color': 'hsl( ' + (MeaningList.currentColour(this.model.cid) / 100) * 255 + '%, 100%, 100%)'
 					, 'opacity': 1});
@@ -228,7 +221,7 @@ function clockSetup() {
 		}
 		, setSize: function() {
 			$(this.el).css({
-				'height': (Math.log( this.model.get('duration'))*50) + 60
+				'height': ((Math.log( this.model.get('duration'))*50) + 60) + 'px auto!'
 			})
 			return this;
 		}
@@ -241,7 +234,8 @@ function clockSetup() {
 			return this;
 		}
 		, edit: function() {
-			$(this.el).addClass("editing").show();
+			alert('Triggering edit mode')
+			$(this.el).addClass("editing");
       this.input.focus();
 		}
     , close: function() {
@@ -250,17 +244,17 @@ function clockSetup() {
       this.model.save({meaning: value});
       $(this.el).removeClass("editing").hide();
     }
-		, clear: function() {
-      this.model.clear();
-		}
     , updateOnEnter: function(e) {
       if (e.keyCode == 13) this.close();
     }
 		, remove: function() {
 			this.model.destroy();
 		}
+		, clear: function() {
+			$(this.el).slideUp(300);
+		}
 	 	, render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.hide().html(this.template(this.model.toJSON())).slideDown();
       this.input = this.$('.edit');
       return this;
 	 	}

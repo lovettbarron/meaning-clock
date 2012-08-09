@@ -111,6 +111,8 @@
 
 body {
 	padding-top: 10px;
+	overflow-x: hidden;
+	overflow-y: hidden;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif !important;
 }
 
@@ -154,6 +156,11 @@ a {
 	background: rgba(220,220,220,1);
 }
 
+#footer a {
+	color: gray;
+	font-weight: bold;
+}
+
 .date {
 	font-size: .8em;
 	padding-right: 10px;
@@ -189,11 +196,13 @@ li.meaning-item > p {
 	line-height: 1.2em;
 }
 
+#entryFormAnchor {
+	width: 100%;
+}
+
 #entry {
 	position: relative;
-	top: 60;
-	left: 0;
-	width: 100%!;
+	width: 100%;
 	background: #eee;
 	padding: 0; margin: 0;
 	font-size: 18px;
@@ -234,6 +243,12 @@ input {
 
 .flashOff {
 	color: gray;
+}
+
+.delete {
+	float:right; clear: none;
+	z-index:10;
+	
 }
 
 #feedback {
