@@ -82,9 +82,15 @@ function clockSetup() {
 			var iteration = 1000 / this.length;
 			return iteration;
 		}
-		, currentColour: function(cid) {
-			var _cid = parseInt(cid);
-			return parseInt( _cid * (1000 / this.length) );
+		, currentColour: function(cid,reverse) {
+			if(reverse == undefined)
+				reverse=true;
+//			var _cid = parseInt(cid);
+			var index = cid.split('c')[1];
+			console.log(index);
+			// This reverses the colour index
+			if(reverse) index = (this.length+1) - index+1;
+			return parseInt( index * (100 / this.length) );
 		}
 		, clearAll: function() {
 			this.reset();
@@ -122,11 +128,12 @@ function clockSetup() {
 	
 		, initialize: function() {
 			clockSetup();
-	  	$(this.el).html(window.clock.toString());
+			this.render();
 		}
 		
 		, render: function() {
-	  	$(this.el).html(window.clock.toString());
+			//alert(window.clock.toString())
+	  	$(this.el).html(window.clock);
 			return this;
 		}
 	})
@@ -139,8 +146,8 @@ function clockSetup() {
 		el: $('#entryFormAnchor')
 		, template: _.template($('#dataEntry').html())
 		, events: {
-			'click #submit' : 'saveEntry'
-			, 'keypress #durationEntry' : 'saveOnEnter'
+			'click #submit' : 'saveOnClick'
+			, 'keypress #meaningDuration' : 'saveOnEnter'
 			, 'keypress #meaningEntry' : 'focusDuration'
 		//	, 'keypress #meaningDuration' : 'saveEntry'
 		}
@@ -148,7 +155,7 @@ function clockSetup() {
 		, initialize: function() {
 			$(this.el).html(this.template);
 		}
-		, saveEntry: function(e) {
+		, saveOnClick: function(e) {
 		//	if(!this.input.val()) return;
 			MeaningList.create({
 					_id: null
@@ -160,7 +167,6 @@ function clockSetup() {
 		}
 		, saveOnEnter: function(e) {
 			if(e.keyCode !== 13) return;
-		//	if(!this.input.val()) return;
 			MeaningList.create({
 				_id: null
 				, date: new Date()
@@ -181,7 +187,7 @@ function clockSetup() {
 	/******************
 	* View to a model *
 	*******************/
- 	var MeaningView = Backbone.View.extend({
+ 		var MeaningView = Backbone.View.extend({
 		tagName: "li"
 
 	 	, template: _.template($('#meaning-item').html())
@@ -210,9 +216,12 @@ function clockSetup() {
 	 	}	
 		, setColour: function() {
 			var colour = MeaningList.currentColour(this.model.cid);
+			console.log('color:' + colour)
 			$(this.el).css({
-					'background-color':'hsl(' + (143+colour*10)+ ', 65%, 53%)',
-					'opacity': 1});
+				'background-color':'hsl( 344, 70%, '
+					+ ((MeaningList.currentColour(this.model.cid, false) / 100) * 30) +'%)'
+//					, 'color': 'hsl( ' + (MeaningList.currentColour(this.model.cid) / 100) * 255 + '%, 100%, 100%)'
+					, 'opacity': 1});
 			return this;
 		}
 		, setSize: function() {
@@ -230,14 +239,14 @@ function clockSetup() {
 			return this;
 		}
 		, edit: function() {
-			$(this.el).addClass("editing");
+			$(this.el).addClass("editing").show();
       this.input.focus();
 		}
     , close: function() {
       var value = this.input.val();
       if (!value) this.clear();
       this.model.save({meaning: value});
-      $(this.el).removeClass("editing");
+      $(this.el).removeClass("editing").hide();
     }
 		, clear: function() {
       this.model.clear();
@@ -273,7 +282,6 @@ function clockSetup() {
       MeaningList.bind('reset', this.addAll, this);
       MeaningList.bind('all', this.render, this);
 			
-
 			MeaningList.fetch();
 		}
 		

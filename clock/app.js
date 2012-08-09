@@ -91,83 +91,15 @@ app.get('/clock/:userid?', function(req, res){
   });
 });
 
-app.post('/feedback', function(req, res) {
-	var total = 0;
-	var count = 0;
-	var feedback = [];
-	var todayDate = new Date();
-	// Old version of meaning count
-	/*
-	for( var key in req.session.activity) {
-		var todayDate = req.session.activity[key].time;
-		var currentDate = new Date().getDate();
-		if( parseInt(todayDate.substr(8,2)) === parseInt(currentDate) ) {
-			var count = count + req.session.activity[key].duration;
-		}	
-	}*/
-	
-	for( var key in req.session.days) {
-		total = req.session.days[key].today;
-		var currentDate = new Date().getDate();
-		if( currentDate === req.session.activity[req.session.days[key]].time) {
-			count = req.session.activity[req.session.days[key]].duration;
-			}
-//		count.push(req.session.days[key].today);
-		req.session.day[key].feedback = getDailyFeedback(req.session.days[key].today);
-	}
-	
-	var response = { count : count, total: total, feedback: 'Testing feedback' };
-	res.json(response);
-});
 
 app.get('/clock/api', function(req, res) {
-	var response = {};
-	var getDate = {}
-	getDate.year = req.params.year;
-	getDate.month = req.params.month;
-	getDate.day = req.params.day
-	req.session.activity = [];
-	req.session.days = [];
-	
-	//Pulls data from mongo
-	var query = Entry.find( {'entry.user': req.session.userid } );
-	 query.sort( 'entry.time', -1 )
-			.limit(50)
-			.exec(function(err,doc) {
-					if(err) console.log("Err retrieving:" + err)
-					if( doc !== undefined ) {
-						for( var key in doc){
-							if( doc.hasOwnProperty(key) ) {
-								console.log(doc[key].entry);
-								req.session.activity.push(doc[key].entry);
-								}
-							}
-						//Populate reference array of keys
-						for( var key in req.session.activity) {
-							if(req.session.activity[key].time.getDay()) {
-								var check = false;
-								for(var dayKey in req.session.days) {
-									if(req.session.days[dayKey] !== undefined) {
-										check = true;
-									}
-									req.session.days[dayKey].push(key)
-								}
-							}
-						}
-						// Counts the number of meaningful hours
-						for( var key in req.session.days) {
-							var meaningCount = 0;
-							for( var dayKey in req.session.days[key]) {
-								meaningCount = req.session.activity[dayKey].duration;
-							}
-							req.session.days[key].today = meaningCount;
-						}
-						
-						response = req.session.activity;
-						
-						res.json( response );
-					} // Ends check for entries
-			}); // End query
+	return Entry.find( function(err,doc) {
+		if(!err){
+			return res.send(doc);
+		} else {
+			return console.log(err)
+		}
+	})
 });
 
 app.post('/clock/api', function(req, res) {
@@ -175,7 +107,7 @@ app.post('/clock/api', function(req, res) {
 			newEntry.entry = {
 					"user": req.session.userid
 					, "duration" : req.body.duration
-					, "meaning" : req.body.activity
+					, "meaning" : req.body.meaning
 					, "date" : new Date()
 				};
 
@@ -185,12 +117,30 @@ app.post('/clock/api', function(req, res) {
 					});
 });
 
-app.put('/clock/api', function(req,res) {
-	
+app.put('/clock/api/:id', function(req,res) {
+	return Entry.findById( req.params.id, function(err,doc) {
+		doc.meaning = req.body.meaning;
+		doc.duration = req.body.duration;
+		return doc.save(function(err) {
+			if(!err) {
+				console.log('Updated successfully: ' + req.params.id )
+			} else {
+				return console.log(err)
+			}
+		})
+	})
 });
 
-app.delete('/clock/api', function(req,res) {
-
+app.delete('/clock/api/:id', function(req,res) {
+	return Entry.findById( req.params.id, function(err,doc) {
+		return doc.remove(function(err) {
+			if(!err) {
+				console.log('Deleted ' + req.params.id)
+			} else {
+				console.log(err)
+			}
+		})
+	})
 });
 
 
