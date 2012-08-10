@@ -91,29 +91,23 @@ function clockSetup() {
 			// I'm checking to see if the thing has been checked and then populates the array.
 			// There should be other checking too, like for additions and re-rendering and such.
 			if(!this.postsIndex) this.populateIndex();
-			if(reverse == undefined)
-				reverse=true;
+			if(reverse == undefined) reverse=true;
 			var index = cid.split('c')[1];
-			var lengthOfDay = this.postsIndex[new Date(this.getByCid(cid).get('date')).getDate()];
+			var currentDay = new Date(this.getByCid(cid).get('date')).getDate();
+			var lengthOfDay = this.postsIndex[currentDay];
 			var prevSubtr = 0;
 			for(var key in this.postsIndex) {
-				if(this.postsIndex[key]) {
-					prevSubtr += this.postsIndex[key]
+				if( key < currentDay ) {
+					if(this.postsIndex[key]) {
+						prevSubtr += this.postsIndex[key]
+					}
 				}
 			}
-			console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
-			/*
-			if(index > this.length+1) index = this.length+1;
-			console.log(index);
-			// This reverses the colour index
-			return parseInt( index * (100 / this.length ) );*/
-			//if(reverse) index = (this.length+1) - index+1;
-			
-			return parseInt( (prevSubtr-index) * (100 / lengthOfDay));
+			// console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
+			return parseInt( (index-prevSubtr) * (100 / lengthOfDay));
 			
 		}
 		, getDay: function(cid) {
-		//		console.log("This!" + parseInt( new Date(this.getByCid(cid).get('date')).getDay()))
 				return parseInt( new Date(this.getByCid(cid).get('date')).getDate());
 		}
 		, clearAll: function() {
@@ -255,7 +249,7 @@ function clockSetup() {
 			console.log('color:' + colour)
 			console.log('Day:' + MeaningList.getDay(this.model.cid));
 			$(this.el).css({
-				'background-color':'hsl( ' + (MeaningList.getDay(this.model.cid) * 255) + ', 70%, '
+				'background-color':'hsl( ' + (MeaningList.getDay(this.model.cid) * 200) + ', 60%, '
 //				'background-color':'hsl( 154, 70%, '
 					+ (((MeaningList.getRank(this.model.cid, false) / 100) * 50)+10) +'%)'
 //					, 'color': 'hsl( ' + (MeaningList.currentColour(this.model.cid) / 100) * 255 + '%, 100%, 100%)'
