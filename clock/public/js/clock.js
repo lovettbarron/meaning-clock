@@ -71,30 +71,66 @@ function clockSetup() {
 		
 		, localStorage: new Backbone.LocalStorage("meaning-backbone")
 		//, url:"./act/",
-		
+//		, postsIndex: []
 		, initialize: function () {
-
+		}
+		, populateIndex: function() {
+			
+			this.postsIndex = this.postsPerDay();
+			return this;
 		}
 		, sortDays: function() {
 			
 		}
 		, colourStep: function() {
-			var iteration = 1000 / this.length;
-			return iteration;
+				var iteration = 1000 / this.length;
+				return iteration;
 		}
-		, currentColour: function(cid,reverse) {
+		, getRank: function(cid,reverse) {
+			// Okay, I think this is a not great hack, but not sure how to do preprocessing
+			// I'm checking to see if the thing has been checked and then populates the array.
+			// There should be other checking too, like for additions and re-rendering and such.
+			if(!this.postsIndex) this.populateIndex();
 			if(reverse == undefined)
 				reverse=true;
-//			var _cid = parseInt(cid);
 			var index = cid.split('c')[1];
+			var lengthOfDay = this.postsIndex[new Date(this.getByCid(cid).get('date')).getDate()];
+			var prevSubtr = 0;
+			for(var key in this.postsIndex) {
+				if(this.postsIndex[key]) {
+					prevSubtr += this.postsIndex[key]
+				}
+			}
+			console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
+			/*
 			if(index > this.length+1) index = this.length+1;
 			console.log(index);
 			// This reverses the colour index
-			if(reverse) index = (this.length+1) - index+1;
-			return parseInt( index * (100 / this.length) );
+			return parseInt( index * (100 / this.length ) );*/
+			//if(reverse) index = (this.length+1) - index+1;
+			
+			return parseInt( (prevSubtr-index) * (100 / lengthOfDay));
+			
+		}
+		, getDay: function(cid) {
+		//		console.log("This!" + parseInt( new Date(this.getByCid(cid).get('date')).getDay()))
+				return parseInt( new Date(this.getByCid(cid).get('date')).getDate());
 		}
 		, clearAll: function() {
 			this.reset();
+		}
+		, postsPerDay: function() {
+			var days = this.pluck('date');
+			var array = [];
+			for(var dates in days) {
+				var index = new Date(days[dates]).getDate();
+				if(!index) index = 0;
+				console.log('The index ' + index + "and array " + array[index] )
+				if(array[index]) { array[index] += 1 }
+				else { array[index] = 1; }
+			}
+			console.log("the array:" + array)
+			return array;
 		}
 		, comparator: function(meaning) {
 			return meaning.get('date');
@@ -191,7 +227,7 @@ function clockSetup() {
 	*******************/
  		var MeaningView = Backbone.View.extend({
 		tagName: "li"
-
+		, className: 'meaning-item'
 	 	, template: _.template($('#meaning-item').html())
 
 	 	, events: {
@@ -215,11 +251,13 @@ function clockSetup() {
 		}
 
 		, setColour: function() {
-			var colour = MeaningList.currentColour(this.model.cid);
+			var colour = MeaningList.getRank(this.model.cid);
 			console.log('color:' + colour)
+			console.log('Day:' + MeaningList.getDay(this.model.cid));
 			$(this.el).css({
-				'background-color':'hsl( 154, 70%, '
-					+ ((MeaningList.currentColour(this.model.cid, false) / 100) * 30) +'%)'
+				'background-color':'hsl( ' + (MeaningList.getDay(this.model.cid) * 255) + ', 70%, '
+//				'background-color':'hsl( 154, 70%, '
+					+ (((MeaningList.getRank(this.model.cid, false) / 100) * 50)+10) +'%)'
 //					, 'color': 'hsl( ' + (MeaningList.currentColour(this.model.cid) / 100) * 255 + '%, 100%, 100%)'
 					, 'opacity': 1});
 			return this;
