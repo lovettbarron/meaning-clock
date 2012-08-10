@@ -58,10 +58,15 @@
 		background: transparent;
 		max-width: 640px!;
 		padding: 0px;
+//		margin-top:60px;
 	}
 	
 	#header {
+		/*position: fixed;	
+		top:0; left: 20%;*/
+		z-index:999;
 		height: 60px;
+		background: 1px solid rgba(0,0,0,.7);
 	}
 	
 	#footer > div {

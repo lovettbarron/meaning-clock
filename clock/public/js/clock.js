@@ -126,6 +126,17 @@ function clockSetup() {
 			console.log("the array:" + array)
 			return array;
 		}
+		, timeLeftToday: function() {
+			var today = new Date().getDate();
+			var dates = this.pluck('date');
+			var timeLeft = 24
+			for(var key in dates) {
+				if(new Date(dates[key]).getDate() == today) {
+					timeLeft -= this.where({date : dates[key]})[0].get('duration');
+				}
+			}
+			return timeLeft;
+		}
 		, comparator: function(meaning) {
 			return meaning.get('date');
 		}
@@ -174,7 +185,8 @@ function clockSetup() {
 	
 	var DataEntryView = Backbone.View.extend({
 		el: $('#entryFormAnchor')
-		, template: _.template($('#dataEntry').html())
+		, enterTemplate: _.template($('#dataEntry').html())
+		, failTemplate: _.template($('#noDataEntry').html())
 		, events: {
 			'click #submit' : 'saveOnClick'
 			, 'keypress #meaningDuration' : 'saveOnEnter'
@@ -184,7 +196,11 @@ function clockSetup() {
 		
 		, initialize: function() {
 //			$el.html(this.template);
-			$(this.el).hide().html(this.template).slideDown(700);
+			if(MeaningList.timeLeftToday() > 0) {
+				$(this.el).hide().html(this.enterTemplate).slideDown(700);
+			} else {
+				$(this.el).hide().html(this.failTemplate).slideDown(700);
+			}
 		}
 		, saveOnClick: function(e) {
 		//	if(!this.input.val()) return;

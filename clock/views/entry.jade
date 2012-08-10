@@ -42,3 +42,7 @@ script#dataEntry(type='text/template')
 		input#meaningEntry(type='text', placeholder='How did you spend your time?')
 		input#meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
 		a#submit.btn.btn-primary Submit!
+script#noDataEntry(type='text/template')
+	#entry.form
+		h3 Sorry, but there are only 24 hours in a day. 
+		p Correct your time for today if you want to fill in more meaningful time
