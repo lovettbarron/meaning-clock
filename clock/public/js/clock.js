@@ -29,6 +29,9 @@ function clockSetup() {
 	}, 100);
 }
 
+function arrayRandomize(array) {
+	return Math.floor(Math.random() * array.length)
+}
 
 
 
@@ -119,11 +122,11 @@ function clockSetup() {
 			for(var dates in days) {
 				var index = new Date(days[dates]).getDate();
 				if(!index) index = 0;
-				console.log('The index ' + index + "and array " + array[index] )
+				//console.log('The index ' + index + "and array " + array[index] )
 				if(array[index]) { array[index] += 1 }
 				else { array[index] = 1; }
 			}
-			console.log("the array:" + array)
+			//console.log("the array:" + array)
 			return array;
 		}
 		, timeLeftToday: function() {
@@ -179,14 +182,16 @@ function clockSetup() {
 		}
 	})
 	
+	
+	
 	/************************************************************
 								Data Entry view appears and gets destroyed
 	************************************************************/
-	
 	var DataEntryView = Backbone.View.extend({
 		el: $('#entryFormAnchor')
 		, enterTemplate: _.template($('#dataEntry').html())
 		, failTemplate: _.template($('#noDataEntry').html())
+		, noContentTemplate: _.template($('#noContentEntry').html())
 		, events: {
 			'click #submit' : 'saveOnClick'
 			, 'keypress #meaningDuration' : 'saveOnEnter'
@@ -203,17 +208,23 @@ function clockSetup() {
 			}
 		}
 		, saveOnClick: function(e) {
-		//	if(!this.input.val()) return;
-			MeaningList.create({
-					_id: null
-					, date: new Date()
-					, meaning: $('#meaningEntry').val()
-					, duration: $('#meaningDuration').val()
-				});
-	     	this.done();
-		}
+			this.save();
+			}
 		, saveOnEnter: function(e) {
 			if(e.keyCode !== 13) return;
+			this.save();
+		}
+		, save: function() {
+			var proposedTime = MeaningList.timeLeftToday() - $('#meaningDuration').val();
+			if(!$('#meaningDuration').val()) return;
+			if(!$('#meaningEntry').val()) {
+				$(this.el).slideUp(100).html(this.noContentTemplate).slideDown(700);
+				return;
+			} 
+			if( proposedTime <= 0) {
+					$(this.el).slideUp(100).html(this.failTemplate).slideDown(700);
+					return;
+			} else {
 			MeaningList.create({
 				_id: null
 				, date: new Date()
@@ -221,6 +232,7 @@ function clockSetup() {
 				, duration: $('#meaningDuration').val()
 			});
      	this.done();
+			}
 		}
 		, focusDuration: function(e) {
 			if(e.keyCode == 13)
@@ -228,7 +240,46 @@ function clockSetup() {
 		}
 		, done: function() {
 			$(this.el).slideUp(100);
-//			this.remove();
+			this.commentOnMeaning();
+		}
+		, commentOnMeaning: function() {
+			var meaningfulHours = 24-(MeaningList.timeLeftToday() - $('#meaningDuration').val());
+			var none = [
+			'You\'re not really using the app'
+			,'What\'s meaningful to you?'
+			,'What was the last thing you spent an hour doing.'
+			,'how do you think your parents felt?'
+			,'what do you feel like when someone appraises you?'
+			];
+			var bad = [
+			'So you\'ve only had ' + meaningfulHours + ' today?'
+			,'Your life seems dull'
+			];
+			var good = [
+			'You\'re doing a lot to bring meaning into your life. But what are you missing?'
+			,'Is work the only thing that\'s meaningful to you?'
+			];
+			var excellent = [
+			'You seem to have a lot of purpose in your life'
+			,'Are you sure all '+ meaningfulHours +' those hours are meaningful?'
+			];
+
+			if( meaningfulHours <= 0 ) {
+				response = none[arrayRandomize(none)];
+			} else
+			if( meaningfulHours >= 1 && meaningfulHours <= 8 ) {
+				response = bad[arrayRandomize(bad)];		
+			} else
+			if( meaningfulHours >= 9 && meaningfulHours <= 16 ) {
+				response = good[arrayRandomize(good)];		
+			} else
+			if( meaningfulHours >= 17) {
+				response = excellent[arrayRandomize(excellent)];		
+			} else
+			if( meaningfulHours === undefined) {
+				response = "Sorry, we couldn't get your rating";
+			}
+      $('#meaningComment').html(response);
 		}
 	})
 	
@@ -261,15 +312,16 @@ function clockSetup() {
 		}
 
 		, setColour: function() {
-			var colour = MeaningList.getRank(this.model.cid);
-			console.log('color:' + colour)
-			console.log('Day:' + MeaningList.getDay(this.model.cid));
+			var lightness = ( ( MeaningList.getRank(this.model.cid) / 100 ) * 50) + 10;
+			var colour = MeaningList.getDay(this.model.cid) * 200;
+			//console.log('color:' + colour);
+			//console.log('Day:' + MeaningList.getDay(this.model.cid));
+
 			$(this.el).css({
-				'background-color':'hsl( ' + (MeaningList.getDay(this.model.cid) * 200) + ', 60%, '
-//				'background-color':'hsl( 154, 70%, '
-					+ (((MeaningList.getRank(this.model.cid, false) / 100) * 50)+10) +'%)'
-//					, 'color': 'hsl( ' + (MeaningList.currentColour(this.model.cid) / 100) * 255 + '%, 100%, 100%)'
+				'background-color':'hsl( ' + colour + ', 60%, ' //154,70%,n% original
+					+  lightness  + '%)'
 					, 'opacity': 1});
+					
 			return this;
 		}
 		, setSize: function() {
@@ -279,11 +331,11 @@ function clockSetup() {
 			return this;
 		}
 		, showOptions: function() {
-			$(this.el).find('.delete').show();
+			$(this.el).find('.onHover').show();
 			return this;
 		}
 		, hideOptions: function() {
-			$(this.el).find('.delete').hide();
+			$(this.el).find('.onHover').hide();
 			return this;
 		}
 		, edit: function() {
@@ -342,13 +394,14 @@ function clockSetup() {
 			}
 		}
 		
-		, addOne: function(meaning) {
+		, addOne: function(meaning, iter) {
+			if(iter==undefined) iter = false;
 			var view = new MeaningView({model: meaning});
       $('ul#meaningList').prepend(view.render().el);
 		}
 		
 		, addAll: function() {
-      MeaningList.each(this.addOne);
+      MeaningList.each(this.addOne, true);
     }
 
 		, resetCollection: function() {
@@ -356,7 +409,6 @@ function clockSetup() {
 					MeaningList.reset();
 	 			})
 		}
-		
 		, render: function() {
 				console.log('Rendering AppView');
 				return this;

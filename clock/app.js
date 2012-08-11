@@ -17,7 +17,8 @@ var Schema = mongoose.Schema
 
 var entrySchema = new Schema({ 
 		'entry' : {
-			user: Number
+			userid: Number
+			, id: ObjectId
 			, date: Date
 			, meaning: String
 			, duration: Number
@@ -83,7 +84,7 @@ app.get('/clock/:userid?', function(req, res){
 		req.session.userid = 3;
 		console.log('Heather is logged in');
 		}
-		else { console.log('Random user logged in, local only') }
+	else { console.log('Random user logged in, local only') }
 	
   res.render('entry', {
 		title: 'Clock'
@@ -106,9 +107,10 @@ app.post('/clock/api', function(req, res) {
 			var newEntry = new Entry();
 			newEntry.entry = {
 					"user": req.session.userid
+					, "id" : new ObjectId
 					, "duration" : req.body.duration
 					, "meaning" : req.body.meaning
-					, "date" : new Date()
+					, "date" : new Date(req.body.date).getUTCDate
 				};
 
 			newEntry.save( function(err) {
@@ -117,6 +119,7 @@ app.post('/clock/api', function(req, res) {
 					});
 });
 
+// Modify meaning
 app.put('/clock/api/:id', function(req,res) {
 	return Entry.findById( req.params.id, function(err,doc) {
 		doc.meaning = req.body.meaning;

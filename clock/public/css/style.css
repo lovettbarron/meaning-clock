@@ -8,8 +8,13 @@
 		overflow-x: hidden;
 	}
 	
+	
+	div {
+		display: block;
+	}
+	
 	#entry {
-		
+		display: block;
 	}
 	
 	#clockFace {
@@ -18,6 +23,10 @@
 	
 	#header {
 		height: 100px;
+	}
+	
+	#header > h1 {
+		font-size: 1.5em;
 	}
 	
 	#header > .menu {
@@ -33,6 +42,9 @@
 		opacity: 1.0;	
 	}
 	
+	#footer {
+		
+	}
 	
 	.mobile {
 		display: block;
@@ -215,6 +227,18 @@ li.meaning-item > p {
 	width: 100%;
 	background: #eee;
 	padding: 0; margin: 0;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 58px;
+	text-align: left;
+	border-top: 1px solid rgba(255,255,255,.07);
+	border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+#entryFail {
+	width: auto;
+	background: rgba(255,180,180,.8);
+	padding: 10px; margin: 0;
 	font-size: 18px;
 	font-weight: bold;
 	line-height: 58px;

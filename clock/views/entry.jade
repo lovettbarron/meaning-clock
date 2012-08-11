@@ -13,6 +13,7 @@ script(src='/js/clock.js')
 	ul#meaningList
 
 	#footer
+		#meaningComment
 		#people
 			p The Meaning clock reflects meaningful time back on you. There is only so much time to spend, so why not spend it meaningfully?
 			h3 GobbleGobbleGobble
@@ -29,11 +30,11 @@ script#meaning-list(type='text/template')
 
 
 script#meaning-item(type='text/template')
-	a.btn.hide.delete.pull-right x
+	a.btn.hide.delete.onHover.pull-right x
 	p
 		<%= meaning %> for <%= duration %> hours
 	.date.hide <%= date %>
-	input.edit(type="text").hide <%= meaning %>
+	input.edit(type="text", placeholder="<%= meaning %>").hide
 
 script#clock(type='text/template')
 
@@ -43,6 +44,11 @@ script#dataEntry(type='text/template')
 		input#meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
 		a#submit.btn.btn-primary Submit!
 script#noDataEntry(type='text/template')
-	#entry.form
-		h3 Sorry, but there are only 24 hours in a day. 
+	#entryFail
+		h2 Sorry, but there are only 24 hours in a day. 
 		p Correct your time for today if you want to fill in more meaningful time
+script#noContentEntry(type='text/template')
+	#entryFail
+		h2 Sorry, but that time needs meaning. 
+		p What kind of time makes you happy or leaves you feeling good about your life?
+		p Give us an hour or two of that!
