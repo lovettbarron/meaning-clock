@@ -182,6 +182,58 @@ function arrayRandomize(array) {
 		}
 	})
 	
+	/************************************************************
+								Data Entry view appears and gets destroyed
+	************************************************************/
+	var responseView = Backbone.View.extend({
+		el: $('#meaningComment')
+		, events: {
+			
+		},
+		initialize: function() {
+			
+		}
+		, commentOnMeaning: function() {
+			var meaningfulHours = 24-(MeaningList.timeLeftToday() - $('#meaningDuration').val());
+			var none = [
+			'You\'re not really using the app'
+			,'What\'s meaningful to you?'
+			,'What was the last thing you spent an hour doing.'
+			,'how do you think your parents felt?'
+			,'what do you feel like when someone appraises you?'
+			];
+			var bad = [
+			'So you\'ve only had ' + meaningfulHours + ' today?'
+			,'Your life seems dull'
+			];
+			var good = [
+			'You\'re doing a lot to bring meaning into your life. But what are you missing?'
+			,'Is work the only thing that\'s meaningful to you?'
+			];
+			var excellent = [
+			'You seem to have a lot of purpose in your life'
+			,'Are you sure all '+ meaningfulHours +' those hours are meaningful?'
+			];
+
+			if( meaningfulHours <= 0 ) {
+				response = none[arrayRandomize(none)];
+			} else
+			if( meaningfulHours >= 1 && meaningfulHours <= 8 ) {
+				response = bad[arrayRandomize(bad)];		
+			} else
+			if( meaningfulHours >= 9 && meaningfulHours <= 16 ) {
+				response = good[arrayRandomize(good)];		
+			} else
+			if( meaningfulHours >= 17) {
+				response = excellent[arrayRandomize(excellent)];		
+			} else
+			if( meaningfulHours === undefined) {
+				response = "Sorry, we couldn't get your rating";
+			}
+      $('#meaningComment').html(response);
+		}
+		
+	})
 	
 	
 	/************************************************************
@@ -240,46 +292,7 @@ function arrayRandomize(array) {
 		}
 		, done: function() {
 			$(this.el).slideUp(100);
-			this.commentOnMeaning();
-		}
-		, commentOnMeaning: function() {
-			var meaningfulHours = 24-(MeaningList.timeLeftToday() - $('#meaningDuration').val());
-			var none = [
-			'You\'re not really using the app'
-			,'What\'s meaningful to you?'
-			,'What was the last thing you spent an hour doing.'
-			,'how do you think your parents felt?'
-			,'what do you feel like when someone appraises you?'
-			];
-			var bad = [
-			'So you\'ve only had ' + meaningfulHours + ' today?'
-			,'Your life seems dull'
-			];
-			var good = [
-			'You\'re doing a lot to bring meaning into your life. But what are you missing?'
-			,'Is work the only thing that\'s meaningful to you?'
-			];
-			var excellent = [
-			'You seem to have a lot of purpose in your life'
-			,'Are you sure all '+ meaningfulHours +' those hours are meaningful?'
-			];
-
-			if( meaningfulHours <= 0 ) {
-				response = none[arrayRandomize(none)];
-			} else
-			if( meaningfulHours >= 1 && meaningfulHours <= 8 ) {
-				response = bad[arrayRandomize(bad)];		
-			} else
-			if( meaningfulHours >= 9 && meaningfulHours <= 16 ) {
-				response = good[arrayRandomize(good)];		
-			} else
-			if( meaningfulHours >= 17) {
-				response = excellent[arrayRandomize(excellent)];		
-			} else
-			if( meaningfulHours === undefined) {
-				response = "Sorry, we couldn't get your rating";
-			}
-      $('#meaningComment').html(response);
+			//this.commentOnMeaning();
 		}
 	})
 	
