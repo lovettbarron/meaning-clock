@@ -193,6 +193,9 @@ function arrayRandomize(array) {
 		initialize: function() {
 			
 		}
+		, render: function() {
+      $('#meaningComment').html(response);
+		}
 		, commentOnMeaning: function() {
 			var meaningfulHours = 24-(MeaningList.timeLeftToday() - $('#meaningDuration').val());
 			var none = [
@@ -230,7 +233,7 @@ function arrayRandomize(array) {
 			if( meaningfulHours === undefined) {
 				response = "Sorry, we couldn't get your rating";
 			}
-      $('#meaningComment').html(response);
+			return response;
 		}
 		
 	})
