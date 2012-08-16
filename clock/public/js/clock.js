@@ -235,18 +235,20 @@ function arrayRandomize(array) {
 			$(this.el).fadeOut(100).html(this.template({response: this.getResponse()})).fadeIn(700);
 		}
 		, getResponse: function() {
-			var meaningfulHours = 24 - ( MeaningList.timeLeftToday() );
+			var percentOfDayCompleted = ( (new Date().getHours() + 1) / 24  );
+			var meaningfulHours = (24 - ( MeaningList.timeLeftToday() ) ) / percentOfDayCompleted  ;
+			console.log("New meaningful hour test:" + meaningfulHours)
 			var response;
 
 			var none = [
 			'You\'re not really using the app'
 			,'What\'s meaningful to you?'
-			,'What was the last thing you spent an hour doing.'
-			,'how do you think your parents felt?'
-			,'what do you feel like when someone appraises you?'
+			,'What was the last thing you spent time on?'
+			,'What was the last thing you just felt you had to do?'
 			];
 			var bad = [
-			'So you\'ve only had ' + meaningfulHours + ' today?'
+			// This one is a weirdo hack to get back to the right time
+			'So you\'ve only had ' + (meaningfulHours*percentOfDayCompleted) + ' today?'
 			,'Your life seems dull'
 			];
 			var good = [
@@ -255,16 +257,16 @@ function arrayRandomize(array) {
 			];
 			var excellent = [
 			'You seem to have a lot of purpose in your life'
-			,'Are you sure all '+ meaningfulHours +' those hours are meaningful?'
+			,'Are you sure all '+ (meaningfulHours*percentOfDayCompleted) +' those hours are meaningful?'
 			];
 
 			if( meaningfulHours <= 0 ) {
 				response = none[arrayRandomize(none)];
 			} else
-			if( meaningfulHours >= 1 && meaningfulHours <= 8 ) {
+			if( meaningfulHours >= 1 && meaningfulHours <= 4 ) {
 				response = bad[arrayRandomize(bad)];		
 			} else
-			if( meaningfulHours >= 9 && meaningfulHours <= 16 ) {
+			if( meaningfulHours >= 5 && meaningfulHours <= 16 ) {
 				response = good[arrayRandomize(good)];		
 			} else
 			if( meaningfulHours >= 17) {
