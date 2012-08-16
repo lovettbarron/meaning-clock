@@ -106,15 +106,14 @@ function arrayRandomize(array) {
 					}
 				}
 			}
-			// console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
-			return parseInt( (index-prevSubtr) * (100 / lengthOfDay));
+			console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
+			// Bad hack time
+			if(index >= this.length*1.5) index = this.length;
+			return parseInt( (index-prevSubtr) * (100 / lengthOfDay) );
 			
 		}
 		, getDay: function(cid) {
 				return parseInt( new Date(this.getByCid(cid).get('date')).getDate());
-		}
-		, clearAll: function() {
-			this.reset();
 		}
 		, postsPerDay: function() {
 			var days = this.pluck('date');
@@ -129,6 +128,7 @@ function arrayRandomize(array) {
 			//console.log("the array:" + array)
 			return array;
 		}
+		// This method states that amount of time left that could be meaningful.
 		, timeLeftToday: function() {
 			var today = new Date().getDate();
 			var dates = this.pluck('date');
@@ -139,6 +139,12 @@ function arrayRandomize(array) {
 				}
 			}
 			return timeLeft;
+		}
+		, meaningToday: function() {
+
+		}
+		, clearAll: function() {
+			this.reset();
 		}
 		, comparator: function(meaning) {
 			return meaning.get('date');
@@ -163,41 +169,75 @@ function arrayRandomize(array) {
 //	fakeData.save();
 
 
-	/************************************************************
-					The animating clock that doesn't seem to animate
-	************************************************************/
+/************************************************************
+	The animating clock that doesn't seem to animate
+************************************************************/
 	var ClockView = Backbone.View.extend({
 		el: $('#clockFace')
 		, events: {
 		}
-	
+
 		, initialize: function() {
 			clockSetup();
 		}
-		
+
 		, render: function() {
 			//alert(window.clock.toString())
 	  	$('#clockFace').html(window.clock);
 			return this;
 		}
 	})
+
+	/************************************************************
+		State that invites the user to sign up
+	************************************************************/
+
+	var inviteView = Backbone.View.extend({
+		el: $('#inviteToEnter')
+		, template: _.template($("#blankMeaning").html())
+		, events: {
+			'click': 'done'
+		}
+	
+		, initialize: function() {
+			this.bind('entryViewDown', this.done, this);
+			this.render;
+
+		}
+		
+		, render: function() {
+			console.log("Rendering invite");
+		  	$(this.el).html(this.template);
+			return this;
+		}
+		, done: function() {
+			this.$el.slideUp(100).remove();
+			app.enterMeaning();
+		}
+	})
+
 	
 	/************************************************************
-								Data Entry view appears and gets destroyed
+		The response view is a critical (and mean) panel
 	************************************************************/
 	var responseView = Backbone.View.extend({
-		el: $('#meaningComment')
+		el: $('#responseAnchor')
+		, template: _.template($('#responsePane').html())
 		, events: {
-			
+		'click':'render'	
 		},
 		initialize: function() {
-			
+			MeaningList.bind('change', this.render, this);
+			this.render()
 		}
 		, render: function() {
-      $('#meaningComment').html(response);
+			console.log("Response view is rendering")
+			$(this.el).fadeOut(100).html(this.template({response: this.getResponse()})).fadeIn(700);
 		}
-		, commentOnMeaning: function() {
-			var meaningfulHours = 24-(MeaningList.timeLeftToday() - $('#meaningDuration').val());
+		, getResponse: function() {
+			var meaningfulHours = 24 - ( MeaningList.timeLeftToday() );
+			var response;
+
 			var none = [
 			'You\'re not really using the app'
 			,'What\'s meaningful to you?'
@@ -232,15 +272,19 @@ function arrayRandomize(array) {
 			} else
 			if( meaningfulHours === undefined) {
 				response = "Sorry, we couldn't get your rating";
+			} else {
+				response = "Something went wrong in judging you"
 			}
 			return response;
 		}
-		
+		, done: function() {
+			$(this.el).slideUp(100);
+		}
 	})
 	
 	
 	/************************************************************
-								Data Entry view appears and gets destroyed
+			Data Entry view appears and gets destroyed
 	************************************************************/
 	var DataEntryView = Backbone.View.extend({
 		el: $('#entryFormAnchor')
@@ -257,7 +301,7 @@ function arrayRandomize(array) {
 		, initialize: function() {
 //			$el.html(this.template);
 			if(MeaningList.timeLeftToday() > 0) {
-				$(this.el).hide().html(this.enterTemplate).slideDown(700);
+				$(this.el).hide().html(this.enterTemplate).trigger('entryViewDown').slideDown(700);
 			} else {
 				$(this.el).hide().html(this.failTemplate).slideDown(700);
 			}
@@ -280,13 +324,13 @@ function arrayRandomize(array) {
 					$(this.el).slideUp(100).html(this.failTemplate).slideDown(700);
 					return;
 			} else {
-			MeaningList.create({
-				_id: null
-				, date: new Date()
-				, meaning: $('#meaningEntry').val()
-				, duration: $('#meaningDuration').val()
-			});
-     	this.done();
+				MeaningList.create({
+					_id: null
+					, date: new Date()
+					, meaning: $('#meaningEntry').val()
+					, duration: $('#meaningDuration').val()
+				});
+				this.done();
 			}
 		}
 		, focusDuration: function(e) {
@@ -295,68 +339,65 @@ function arrayRandomize(array) {
 		}
 		, done: function() {
 			$(this.el).slideUp(100);
-			//this.commentOnMeaning();
 		}
 	})
 	
 	/******************
 	* View to a model *
 	*******************/
- 		var MeaningView = Backbone.View.extend({
-		tagName: "li"
-		, className: 'meaning-item'
-	 	, template: _.template($('#meaning-item').html())
+var MeaningView = Backbone.View.extend({
+	tagName: "li"
+	, className: 'meaning-item'
+ 	, template: _.template($('#meaning-item').html())
+ 	, blankTemplate: _.template($('#blankMeaning').html())
 
-	 	, events: {
-	 		'click a.delete' : 'remove'
-			, 'dblclick' : 'edit'
-			, 'mouseenter' : 'showOptions'
-			, 'mouseleave' : 'hideOptions'
-			, 'tap' : 'showOptions'
-      , 'keypress .edit'  : 'updateOnEnter'
-      , 'blur .edit'      : 'close'
-	 	}
+ 	, events: {
+ 		'click a.delete' : 'remove'
+		, 'dblclick' : 'edit'
+		, 'mouseenter' : 'showOptions'
+		, 'mouseleave' : 'hideOptions'
+		, 'tap' : 'showOptions'
+	  	, 'keypress .edit'  : 'updateOnEnter'
+		, 'blur .edit'      : 'close'	
+ 	}
 
-	 	, initialize: function() {
-      this.model.bind('change', this.render, this);
-      this.model.bind('destroy', this.clear, this);
-			this.setSize().setColour().hideOptions();
-	 	}
-	
-		, blankCanvas: function() {
-			$(this.el).html('Why not do something meaningful today so you can post something!')
-		}
+ 	, initialize: function() {
+		this.model.bind('change', this.setColour().render, this);
+		this.model.bind('destroy', this.clear, this);
+		this.setSize().setColour().hideOptions();
+ 	}
 
-		, setColour: function() {
-			var lightness = ( ( MeaningList.getRank(this.model.cid) / 100 ) * 50) + 10;
-			var colour = MeaningList.getDay(this.model.cid) * 200;
-			//console.log('color:' + colour);
-			//console.log('Day:' + MeaningList.getDay(this.model.cid));
+	, setColour: function() {
+		var lightness = ( ( MeaningList.getRank(this.model.cid) / 100 ) * 50) + 10;
+		var colour = MeaningList.getDay(this.model.cid) * 200;
+		console.log("CID: " + this.model.cid + " Colour: " + colour + " Lightness: " + lightness);
+		//console.log('color:' + colour);
+		//console.log('Day:' + MeaningList.getDay(this.model.cid));
 
-			$(this.el).css({
-				'background-color':'hsl( ' + colour + ', 60%, ' //154,70%,n% original
-					+  lightness  + '%)'
-					, 'opacity': 1});
-					
-			return this;
-		}
-		, setSize: function() {
-			$(this.el).css({
-				'height': ((Math.log( this.model.get('duration'))*50) + 60) + 'px auto!'
-			})
-			return this;
-		}
-		, showOptions: function() {
-			$(this.el).find('.onHover').show();
-			return this;
-		}
-		, hideOptions: function() {
-			$(this.el).find('.onHover').hide();
-			return this;
-		}
-		, edit: function() {
-			alert('Triggering edit mode')
-			$(this.el).addClass("editing");
+		$(this.el).css({
+			'background-color':'hsl( ' + colour + ', 60%, ' //154,70%,n% original
+				+  lightness  + '%)'
+				, 'opacity': 1});
+				
+		return this;
+	}
+	, setSize: function() {
+		$(this.el).css({
+			'height': ((Math.log( this.model.get('duration')) * 50 ) + 60) + 'px auto!'
+		})
+		return this;
+	}
+	, showOptions: function() {
+		$(this.el).find('.onHover').show();
+		return this;
+	}
+	, hideOptions: function() {
+		$(this.el).find('.onHover').hide();
+		return this;
+	}
+	, edit: function() {
+		alert('Triggering edit mode')
+		$(this.el).addClass("editing");
       this.input.focus();
 		}
     , close: function() {
@@ -368,17 +409,17 @@ function arrayRandomize(array) {
     , updateOnEnter: function(e) {
       if (e.keyCode == 13) this.close();
     }
-		, remove: function() {
-			this.model.destroy();
-		}
-		, clear: function() {
-			$(this.el).slideUp(300);
-		}
-	 	, render: function() {
-      this.$el.hide().html(this.template(this.model.toJSON())).slideDown();
-      this.input = this.$('.edit');
-      return this;
-	 	}
+	, remove: function() {
+		this.model.destroy();
+	}
+	, clear: function() {
+		$(this.el).slideUp(300);
+	}
+ 	, render: function() {
+		this.$el.hide().html(this.template(this.model.toJSON())).slideDown();
+		this.input = this.$('.edit');
+		return this;
+ 	}
  })
 	
 	/************************************************************
@@ -394,12 +435,12 @@ function arrayRandomize(array) {
 	
 		, initialize: function() {
 			this.clockView = new ClockView();
-			
-	    MeaningList.bind('add', this.addOne, this);
-      MeaningList.bind('reset', this.addAll, this);
-      MeaningList.bind('all', this.render, this);
-			
+			MeaningList.bind('add', this.addOne, this);
+			MeaningList.bind('reset', this.addAll, this);
+			MeaningList.bind('all', this.render, this);
+				
 			MeaningList.fetch();
+			var response = new responseView();
 		}
 		
 		, enterMeaning: function() {
@@ -411,27 +452,34 @@ function arrayRandomize(array) {
 		}
 		
 		, addOne: function(meaning, iter) {
-			if(iter==undefined) iter = false;
 			var view = new MeaningView({model: meaning});
-      $('ul#meaningList').prepend(view.render().el);
+			$('ul#meaningList').prepend(view.render().el);
 		}
 		
 		, addAll: function() {
-      MeaningList.each(this.addOne, true);
-    }
+    	  MeaningList.each(this.addOne, true);
+    	  // This tosses out a reminder to post if you haven't posted today.
+    	  if(MeaningList.postsPerDay()[new Date().getDate()] === undefined)
+    	  	if(!invite) {
+				var invite = new inviteView();
+				invite.render();
+			} else {
+				invite.render()
+			
+			}
+    	}
 
 		, resetCollection: function() {
-	 			alert('Remove test data?', function() {
-					MeaningList.reset();
-	 			})
+ 			alert('Remove test data?', function() {
+				MeaningList.reset();
+ 			})
 		}
 		, render: function() {
-				console.log('Rendering AppView');
-				return this;
+			console.log('Rendering AppView');
+			return this;
 		}
 	});
 	
 	var app = new AppView();
 });
-//var app = new AppRouter();
 //Backbone.History.start();
