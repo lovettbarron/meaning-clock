@@ -72,8 +72,8 @@ function arrayRandomize(array) {
 		model: MeaningModel
 		
 		
-		, localStorage: new Backbone.LocalStorage("meaning-backbone")
-		//, url:"./act/",
+		//, localStorage: new Backbone.LocalStorage("meaning-backbone")
+		, url:"./clock/api",
 //		, postsIndex: []
 		, initialize: function () {
 		}

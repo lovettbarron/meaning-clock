@@ -29,6 +29,11 @@ script(src='/js/clock.js')
 <!-- templates -->
 script#meaning-list(type='text/template')
 
+script#dayView(type='text/template')
+	ul.stats
+		li.totalTime
+		li.percentMeaningful
+		li.keyWords
 
 script#meaning-item(type='text/template')
 	a.btn.hide.delete.onHover.pull-right x

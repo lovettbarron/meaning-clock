@@ -1,6 +1,8 @@
 var express = require('express')
- 		, util = require('util')
-  	, url = require('url');
+	, util = require('util')
+  	, url = require('url')
+  	, passport = require('passport')
+  	, LocalStrategy = require('passport-local').Strategy;
 
 var	mongoose = require('mongoose');
 
@@ -8,6 +10,62 @@ var db = mongoose.connect('mongodb://localhost/gggclock', function(err) {
 	if( err ) {	console.log(err); }
 	else { console.log("Successful connection"); }
 });
+
+//Passport methods
+
+// Authentication functions
+function findById(id, fn) {
+  var idx = id - 1;
+  if (users[idx]) {
+    fn(null, users[idx]);
+  } else {
+    fn(new Error('User ' + id + ' does not exist'));
+  }
+}
+
+function findByUsername(username, fn) {
+	for (var i = 0, len = users.length; i < len; i++) {
+		var user = users[i];
+		if (user.username === username) {
+			return fn(null, user);
+		}
+	}
+	return fn(null, null);
+}
+
+function ensureAuthenticated(req, res, next) {
+	if (req.isAuthenticated()) { return next(); }
+	res.redirect('/login')
+}
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    process.nextTick(function () {
+      
+      findByUsername(username, function(err, user) {
+        if (err) { return done(err); }
+        if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+        if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
+        return done(null, user);
+      })
+    });
+  }
+));
+
+///Setup app and database
+
+
 
 var app = module.exports = express.createServer();
 
@@ -37,13 +95,15 @@ var requestSchema = new Schema({
 var Request = mongoose.model('request', requestSchema,'request');
 
 app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'jade');
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: '024493' }));
+	app.use(passport.initialize());
+	app.use(passport.session());
 //  app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 //	app.use(express.basicAuth('gobble','gobble')); // Setup password
@@ -52,14 +112,31 @@ app.configure(function(){
 
 
 // Routes
-
+// Main page
 app.get('/', function(req, res){
   res.render('index', {
     title: 'Clock'
   });
 });
 
-app.get('/clock/:userid?', function(req, res){
+//Login structure
+app.get('/login', function(req, res){
+	res.render('login', { user: req.user, message: req.flash('error') });
+	});
+
+app.post('/login', 
+	passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
+		function(req, res) {
+			res.redirect('/');
+	});
+
+app.get('/logout', function(req, res){
+	req.logout();
+	res.redirect('/');
+	});
+
+// Clock app
+app.get('/clock/:userid?', ensureAuthenticated, function(req, res){
 	//Calls userfile
 	var query = Request.find( {'request.username': req.session.userid } );
 		query.exec(function(err,doc) {
@@ -87,13 +164,13 @@ app.get('/clock/:userid?', function(req, res){
 	else { console.log('Random user logged in, local only') }
 	
   res.render('entry', {
-		title: 'Clock'
-    , user: req.session.userid
+	title: 'Clock'
+    , user: req.user
   });
 });
 
 
-app.get('/clock/api', function(req, res) {
+app.get('/clock/api', ensureAuthenticated,  function(req, res) {
 	return Entry.find( function(err,doc) {
 		if(!err){
 			return res.send(doc);
@@ -160,60 +237,6 @@ app.post('/request', function(req, res) {
 				res.json('Saved');
 					});
 });
-
-
-
-function getDailyFeedback(rating) {
-	var none = [
-	'You\'re not really using the app'
-	,'What\'s meaningful to you?'
-	,'What was the last thing you spent an hour doing.'
-	,'how do you think your parents felt?'
-	,'what do you feel like when someone appraises you?'
-	];
-	var bad = [
-	'how does that make you feel?'
-	,'what did you see today?'
-	,'do you think that was a choice?'
-	,'how do you think your parents felt?'
-	,'what do you feel like when someone appraises you?'
-	];
-	var good = [
-	'how does that make you feel?'
-	,'what did you see today?'
-	,'do you think that was a choice?'
-	,'how do you think your parents felt?'
-	,'what do you feel like when someone appraises you?'
-	];
-	var excellent = [
-	'how does that make you feel?'
-	,'what did you see today?'
-	,'do you think that was a choice?'
-	,'how do you think your parents felt?'
-	,'what do you feel like when someone appraises you?'
-	];
-	
-	if( rating <= 0 ) {
-		response = none[arrayRandomize(none)];
-	} else
-	if( rating >= 1 && rating <= 8 ) {
-		response = bad[arrayRandomize(bad)];		
-	} else
-	if( rating >= 9 && rating <= 16 ) {
-		response = good[arrayRandomize(good)];		
-	} else
-	if( rating >= 17) {
-		response = excellent[arrayRandomize(excellent)];		
-	} else
-	if( rating === undefined) {
-		response = "Sorry, we couldn't get your rating";
-	}
-	return response;
-}
-
-function arrayRandomize(array) {
-	return Math.floor(Math.random() * array.length)
-}
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
