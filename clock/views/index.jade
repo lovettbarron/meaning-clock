@@ -11,21 +11,24 @@ link(href='http://fonts.googleapis.com/css?family=Allerta', rel='stylesheet', ty
 		img(src="img/clock.png")
 		h1 The Meaning Clock
 		.desc 
-			p The Meaning Clock is an interactive and industrial design object that allows people to easily (perhaps frustratingly) quantify the time they see as “meaningful.” This object serves to challenge our structured and tracked time, and force the question of “What’s meaningful? 
+			p The Meaning Clock is an interactive design object that allows people to easily (perhaps frustratingly) quantify the time they see as “meaningful.” This object serves to challenge our structured and tracked time, and force the question of “What’s meaningful? 
 			.runsOn Runs on iphone, tablet, and desktop
+				br
+				| Physical prototype coming soon!
 
 			#request
-				h3 Register to test the clock!
-				or <a href="#" class="login">login</a>
+				h3 Register to track your meaningful hours!
+				
 				form.form.request
 					
 					input#username(type='text', name='name', placeholder='username')				
 					input#email(type='text', name='email', placeholder='your@email.com')
 					input#password(type='password', name='password', placeholder='password')
 					a#newRequest.btn Complete
-				p.success Awesome, thanks! Try the clock out at <a href="http://ggg.st/clock">ggg.st/clock!</a>
+					| or <a href="#" class="login">login</a>
+				p.success Great, thank you! You can access the meaning clock at any time at <a href="/clock">ggg.st/clock</a>.
 		#login
-			a.backToHome(href="#") Register to try the Meaning Clock
+			a.backToHome(href="#") Register with g3 to track your meaningful hours
 			form(action='/login', method='post')
 				div
 					label Username
