@@ -1,7 +1,7 @@
 {
     "name": "G3_Clock"
 	, "description": "A clock that tells meaningful time"
-	, "homepage": "http://gobble3.me/clock"
+	, "homepage": "http://ggg.st/clock"
 	, "author": "Andrew Lovett-Barron (http://readywater.ca)"
   , "version": "0.1.0"
   , "private": true
@@ -18,5 +18,9 @@
     , "markdown": "0.3.1"
     , "mailer": "0.6.7"
 		, "mongoose": "2.3.12"
+    , "mongoose-types" : "1.0.3"
+    , "bycrypt" : "0.7.1"
+    , "passport" : ">=0.0.1"
+    , "passport-mongoose" : "0.0.1"
   }
 }

@@ -71,10 +71,9 @@ function arrayRandomize(array) {
 		
 		model: MeaningModel
 		
-		
 		//, localStorage: new Backbone.LocalStorage("meaning-backbone")
-		, url:"./clock/api",
-//		, postsIndex: []
+		, url : "/clock/api"
+
 		, initialize: function () {
 		}
 		, populateIndex: function() {
@@ -440,8 +439,16 @@ var MeaningView = Backbone.View.extend({
 			MeaningList.bind('add', this.addOne, this);
 			MeaningList.bind('reset', this.addAll, this);
 			MeaningList.bind('all', this.render, this);
-				
-			MeaningList.fetch();
+			MeaningList.bind('refresh', this.render, this);
+			MeaningList.fetch( {
+				success: function(model, response) {
+					console.log('Returned collection' + model);
+				}
+				, error: function(model, response) {
+					console.log('Error' + JSON.stringify(model) + " err: " + JSON.stringify(response));
+				}
+			});
+			
 			var response = new responseView();
 		}
 		

@@ -4,9 +4,16 @@ var express = require('express')
   	, passport = require('passport')
   	, LocalStrategy = require('passport-local').Strategy;
 
-var	mongoose = require('mongoose');
+var	mongoose = require('mongoose')
+	, Schema = mongoose.Schema
+	, bcrypt = require('bcrypt')
+	, mongooseTypes = require("mongoose-types");
 
-var db = mongoose.connect('mongodb://localhost/gggclock', function(err) {
+	mongooseTypes.loadTypes(mongoose);
+	
+
+
+var db = mongoose.connect('mongodb://localhost/g3clock', function(err) {
 	if( err ) {	console.log(err); }
 	else { console.log("Successful connection"); }
 });
@@ -24,6 +31,13 @@ function findById(id, fn) {
 }
 
 function findByUsername(username, fn) {
+
+	var query = Request.find( {'request.username': req.session.userid } );
+		query.exec(function(err,doc) {
+			req.session.id = doc._id
+			req.session.userid = doc.userid;
+		});
+
 	for (var i = 0, len = users.length; i < len; i++) {
 		var user = users[i];
 		if (user.username === username) {
@@ -38,17 +52,16 @@ function ensureAuthenticated(req, res, next) {
 	res.redirect('/login')
 }
 
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  findById(id, function (err, user) {
+  User.findOne(id, function (err, user) {
     done(err, user);
   });
 });
-
+/*
 passport.use(new LocalStrategy(
   function(username, password, done) {
     process.nextTick(function () {
@@ -61,7 +74,17 @@ passport.use(new LocalStrategy(
       })
     });
   }
-));
+));*/
+
+ passport.use(new LocalStrategy(
+ 	function(username, password, done) {
+ 		User.findOne({ name: username, password: password }, function (err, user) {
+	 		if(err) console.log(err);
+	 		done(err, user);
+ 		});
+ 	}
+ ));
+
 
 ///Setup app and database
 
@@ -73,14 +96,12 @@ var app = module.exports = express.createServer();
 var Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
 
-var entrySchema = new Schema({ 
-		'entry' : {
-			userid: Number
-			, id: ObjectId
+var entrySchema = new Schema({
+			userid: ObjectId
 			, date: Date
 			, meaning: String
 			, duration: Number
-	}}), entry;
+	}), entry;
 
 var Entry = mongoose.model('entry', entrySchema,'entry');
 
@@ -93,6 +114,73 @@ var requestSchema = new Schema({
 	}}), request;
 
 var Request = mongoose.model('request', requestSchema,'request');
+
+
+var UserSchema = new Schema({
+  name: { type: String, unique: true },
+  email: { type: String, unique: true },
+  password: { type: String },
+  // Password
+  /* This is the good way
+  salt: { type: String, required: true },
+  hash: { type: String, required: true }, */
+  
+});
+/* Again, the good way skipped over
+UserSchema.virtual('password').get(function () {
+  return this._password;
+}).set(function (password) {
+  this._password = password;
+  var salt = this.salt = bcrypt.genSaltSync(10);
+  this.hash = bcrypt.hashSync(password, salt);
+}); */
+/*
+UserSchema.virtual('password').get( function() {
+	return this._password;
+}).set( function(password) {
+	this._password = password;
+});*/
+
+UserSchema.method('checkPassword', function (password, callback) {
+  //bcrypt.compare(password, this.hash, callback);
+});
+
+UserSchema.static('authenticate', function(name,password,callback) {
+	this.findOne( {name: name}, function(err,user) {
+		if(err) return callback(err);
+		if(!user) return callback(null, false);
+
+		user.checkPassword(password, function(err, passwordCorrect) {
+			if(err) return callback(err);
+			if(!passwordCorrect) return callback(null, false);
+			return callback(null,user);
+		})
+	})
+})
+
+/*
+UserSchema.static('authenticate', function (name, password, callback) {
+  this.findOne({ name: name }, function(err, user) {
+    if (err)
+      return callback(err);
+
+    if (!user)
+      return callback(null, false);
+
+    user.checkPassword(password, function(err, passwordCorrect) {
+      if (err)
+        return callback(err);
+
+      if (!passwordCorrect)
+        return callback(null, false);
+
+      return callback(null, user);
+    });
+  });
+});*/
+
+var User = mongoose.model('user', UserSchema,'user');
+
 
 app.configure(function(){
 	app.set('views', __dirname + '/views');
@@ -114,9 +202,9 @@ app.configure(function(){
 // Routes
 // Main page
 app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Clock'
-  });
+	res.render('index', {
+		title: 'Clock'
+	});
 });
 
 //Login structure
@@ -127,7 +215,7 @@ app.get('/login', function(req, res){
 app.post('/login', 
 	passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
 		function(req, res) {
-			res.redirect('/');
+			res.redirect('/clock');
 	});
 
 app.get('/logout', function(req, res){
@@ -135,33 +223,14 @@ app.get('/logout', function(req, res){
 	res.redirect('/');
 	});
 
-// Clock app
-app.get('/clock/:userid?', ensureAuthenticated, function(req, res){
+// Clock api
+app.get('/clock', ensureAuthenticated, function(req, res){
 	//Calls userfile
 	var query = Request.find( {'request.username': req.session.userid } );
 		query.exec(function(err,doc) {
 			req.session.id = doc._id
 			req.session.userid = doc.userid;
 		});
-		
-	// original hardcoded
-	if( req.params.userid == 'zahra' ) {
-		req.session.userid = 1;
-		console.log('Zahra is logged in');
-		}
-	else if( req.params.userid == 'andrew' ) { 
-		req.session.userid = 0;
-		console.log('Andrew is logged in');
-		}
-	else if( req.params.userid == 'ayla' ) { 
-		req.session.userid = 2;
-		console.log('Ayla is logged in');
-		}
-	else if( req.params.userid == 'heather' ) { 
-		req.session.userid = 3;
-		console.log('Heather is logged in');
-		}
-	else { console.log('Random user logged in, local only') }
 	
   res.render('entry', {
 	title: 'Clock'
@@ -171,7 +240,9 @@ app.get('/clock/:userid?', ensureAuthenticated, function(req, res){
 
 
 app.get('/clock/api', ensureAuthenticated,  function(req, res) {
-	return Entry.find( function(err,doc) {
+	console.log('Looking for ' + req.user.id)
+	return Entry.find({ userid: req.user.id }, function(err,doc) {
+		console.log('Found stuff!' + doc );
 		if(!err){
 			return res.send(doc);
 		} else {
@@ -182,13 +253,10 @@ app.get('/clock/api', ensureAuthenticated,  function(req, res) {
 
 app.post('/clock/api', function(req, res) {
 			var newEntry = new Entry();
-			newEntry.entry = {
-					"user": req.session.userid
-					, "id" : new ObjectId
-					, "duration" : req.body.duration
-					, "meaning" : req.body.meaning
-					, "date" : new Date(req.body.date).getUTCDate
-				};
+			newEntry.userid = req.user.id;
+			newEntry.duration = req.body.duration;
+			newEntry.meaning = req.body.meaning;
+			newEntry.date = new Date(req.body.date);
 
 			newEntry.save( function(err) {
 				if(err) console.log("Error saving: " + err)
@@ -226,7 +294,7 @@ app.delete('/clock/api/:id', function(req,res) {
 
 // Request account
 app.post('/request', function(req, res) {
-			var newEntry = new Request();
+/*			var newEntry = new Request();
 			newEntry.request = {
 					"email": req.body.email
 					, "username": req.body.username
@@ -235,7 +303,18 @@ app.post('/request', function(req, res) {
 			newEntry.save( function(err) {
 				if(err) console.log("Error saving: " + err)
 				res.json('Saved');
-					});
+					}); */
+	var newUser = new User();
+	newUser.name = req.body.name;
+	newUser.email = req.body.email;
+	newUser.password = req.body.password;
+	newUser.save( function(err) {
+		
+		if(err) {
+			res.json('We had some trouble saving your account!')
+			console.log("Error saving new user: " + err);
+		}
+	});
 });
 
 app.listen(3000);

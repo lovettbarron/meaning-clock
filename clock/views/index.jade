@@ -1,22 +1,40 @@
 script(src='/js/home.js')
+link(href='http://fonts.googleapis.com/css?family=Crimson+Text', rel='stylesheet', type='text/css')
+link(href='http://fonts.googleapis.com/css?family=Allerta', rel='stylesheet', type='text/css')
 .container
-	.row-fluid(style='margin-bottom: 200px; margin-top: 100px')
-		.span12
-			h1(style='text-align: center;') Gobble Gobble Gobble
-			h6(style='text-align: center;') Toronto/NYC Design Collective
-	.row-fluid
-		.span6(style='text-align: right')
-			p G3 is 
-				a(href='https://twitter.com/zahraeb') Zahra Ebrahim 
-				|  and  
-				a(href='http://twitter.com/readywater') Andrew Lovett-Barron.
-			p We're building networked objects that enable more interesting lives.
-		.span6
-			p We need some help, could you give us a hand?
-			form.form.request
-				label Requested username
-					input#username(type='text', placeholder='gobble3.me/username')
-				label Your email
-					input#email(type='text', placeholder='your@email.com')
-				a#newRequest.btn.btn Sign up!
-			p.success Awesome, thanks! Our accounts are set up manually, and we'll do that for you soon. You'll get an email from one of us, and we can't wait to explore this space with you!
+	#homeHeader
+		img#logo(src='img/logo.png', style='text-align: center')
+		#info
+			p.blurb g3 is a design <span>collective</span> creating objects, experiences, and interventions that challenge our <span>daily quest for purpose</span> in a <span id="1">digitally activated</span>, <span id="2">database tracked</span>, but fundamentally <span id="3">physical</span> world.
+	
+	#clock
+		img(src="img/clock.png")
+		h1 The Meaning Clock
+		.desc 
+			p The Meaning Clock is an interactive and industrial design object that allows people to easily (perhaps frustratingly) quantify the time they see as “meaningful.” This object serves to challenge our structured and tracked time, and force the question of “What’s meaningful? 
+			.runsOn Runs on iphone, tablet, and desktop
+
+			#request
+				h3 Register to test the clock!
+				form.form.request
+					
+					input#username(type='text', name='name', placeholder='username')				
+					input#email(type='text', name='email', placeholder='your@email.com')
+					input#password(type='password', name='password', placeholder='password')
+					a#newRequest.btn Complete
+				p.success Awesome, thanks! Try the clock out at <a href="http://ggg.st/clock">ggg.st/clock!</a>
+
+
+	#bioExpand
+		h1 g3 is Zahra and Andrew
+	#bio
+		#andrew
+			h1 Andrew Lovett-Barron
+			img(src="img/andrew.jpg")
+			p Andrew Lovett-Barron is a Toronto designer and principal of Relay, a design consultancy creating interactive experiences for human scale. He focuses on designing and developing with emerging technologies that foster connection, establish awareness, and adapt to context. Andrew is a graduate of the University of Toronto and an alumni of top agencies such as TAXI Advertising and Normative Design. 
+			p He organizes the Toronto Service Design Jam, cofounded the Handmade Music DIY concert series, and founded CityLenses, an psychogeographic running/reading group. Andrew also speaks and writes on design, prototyping, and technology, and teaches courses on computer vision with kinect and responsive applications.
+		#zahra
+			h1 Zahra Ebrahim
+			img(src="img/zahra.jpg")
+			p Zahra Ebrahim is the Founder and Principal of the design think tank and creative agency, archiTEXT.  Born in Kenya, raised in Vancouver, and educated at McGill University in Montreal, she started archiTEXT at 22 years old as a place to bring together diverse groups to tackle the intersections of architecture and design with social change, to explore the impact of design and creativity on systems change, and to engage the public in a discourse of design and design thinking as a mechanism for creative problem solving.  
+			p At 24, Zahra was invited to teach at the Ontario College of Art and Design (OCAD) in the Think Tank program, getting the next generation of designers asking complex questions of themselves and the world around them.  She is also the co-lead on the Community. Design. Initiative., a legacy project engaging some of Canada's most marginalized youth in architecture and design in Toronto's priority neighborhoods. 
