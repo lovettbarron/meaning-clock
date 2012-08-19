@@ -6,7 +6,7 @@ var express = require('express')
 
 var	mongoose = require('mongoose')
 	, Schema = mongoose.Schema
-	, bcrypt = require('bcrypt')
+	//, bcrypt = require('bcrypt')
 	, mongooseTypes = require("mongoose-types");
 
 	mongooseTypes.loadTypes(mongoose);
