@@ -209,7 +209,10 @@ app.get('/', function(req, res){
 
 //Login structure
 app.get('/login', function(req, res){
-	res.render('login', { user: req.user, message: req.flash('error') });
+	res.render('index', {
+		title: 'Clock'
+	});
+	//res.render('login', { user: req.user, message: req.flash('error') });
 	});
 
 app.post('/login', 

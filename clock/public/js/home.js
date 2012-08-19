@@ -1,7 +1,11 @@
 $(document).ready( function(){
 	$('.success').hide();
 	$('#bio').hide();
-	$('#login').hide();
+	if( (document.URL).search("[login]{5}") > 1) {
+		$('.desc').hide();
+	} else {
+		$('#login').hide();	
+	}
 	//Request account
 	$('#newRequest').click( function(e){
 			e.preventDefault();
