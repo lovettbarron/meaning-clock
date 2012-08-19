@@ -116,6 +116,19 @@ p,div {
 	height: 200px;
 }
 
+
+#login {
+	position: relative;
+	float: right; clear: none;
+	width: 75%;
+	padding: 1em;
+	height: 200px;
+}
+
+#login input {
+	color: #f0f0f0;
+}
+
 .desc p {
 	float: left;
 	clear: none;

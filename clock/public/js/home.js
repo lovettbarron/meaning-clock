@@ -1,6 +1,7 @@
 $(document).ready( function(){
 	$('.success').hide();
 	$('#bio').hide();
+	$('#login').hide();
 	//Request account
 	$('#newRequest').click( function(e){
 			e.preventDefault();
@@ -16,6 +17,20 @@ $(document).ready( function(){
 			
 		}
 
+	});
+
+	$('a.login').click(function(e) {
+		e.preventDefault();
+		$('.desc').fadeOut(500, function() {
+			$('#login').fadeIn(500);	
+		});
+		
+	});
+	$('a.backToHome').click(function(e) {
+		e.preventDefault();
+		$('#login').fadeOut(500, function() {
+			$('.desc').fadeIn(500);
+		});
 	})
 });
 	
