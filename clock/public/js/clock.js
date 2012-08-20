@@ -48,15 +48,15 @@ function arrayRandomize(array) {
 
 		, initialize: function() {
 		  if (!this.get("meaning")) {
-	      this.set({"meaning": this.defaults.meaning});
-	    }	
+			this.set({"meaning": this.defaults.meaning});
+			}	
 		  if (!this.get("duration")) {
-	      this.set({"duration": this.defaults.duration});
-	    }
+			this.set({"duration": this.defaults.duration});
+			}
 		}
 		, toggle: function() {
 //      this.save({done: !this.get("done")});
-    }
+		}
 		, validate: function(attrs) {
 			if(isNaN(attrs.duration)) {
 				console.log("Duration must be a number")

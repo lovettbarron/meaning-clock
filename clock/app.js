@@ -5,8 +5,7 @@ var express = require('express')
   	, LocalStrategy = require('passport-local').Strategy;
 
 var	mongoose = require('mongoose')
-	, Schema = mongoose.Schema
-	//, bcrypt = require('bcrypt')
+	, bcrypt = require('bcrypt')
 	, mongooseTypes = require("mongoose-types");
 
 	mongooseTypes.loadTypes(mongoose);
@@ -115,25 +114,27 @@ var requestSchema = new Schema({
 
 var Request = mongoose.model('request', requestSchema,'request');
 
-
+/*********************
+** The user Schema! **
+*********************/
 var UserSchema = new Schema({
   name: { type: String, unique: true },
   email: { type: String, unique: true },
-  password: { type: String },
+  //password: { type: String },
   // Password
-  /* This is the good way
+  /* This is the good way */
   salt: { type: String, required: true },
-  hash: { type: String, required: true }, */
+  hash: { type: String, required: true }
   
 });
-/* Again, the good way skipped over
+/* Again, the good way skipped over */
 UserSchema.virtual('password').get(function () {
   return this._password;
 }).set(function (password) {
   this._password = password;
   var salt = this.salt = bcrypt.genSaltSync(10);
   this.hash = bcrypt.hashSync(password, salt);
-}); */
+});
 /*
 UserSchema.virtual('password').get( function() {
 	return this._password;
@@ -141,16 +142,19 @@ UserSchema.virtual('password').get( function() {
 	this._password = password;
 });*/
 
-UserSchema.method('checkPassword', function (password, callback) {
-  //bcrypt.compare(password, this.hash, callback);
+UserSchema.method('checkPassword', function (password, hash, callback) {
+  bcrypt.compare(password, hash, callback);
 });
 
 UserSchema.static('authenticate', function(name,password,callback) {
+	console.log("Authenticating:" + name);
 	this.findOne( {name: name}, function(err,user) {
+		console.log("find err:" + err);
 		if(err) return callback(err);
 		if(!user) return callback(null, false);
 
-		user.checkPassword(password, function(err, passwordCorrect) {
+		user.checkPassword(user.password, user.hash, function(err, passwordCorrect) {
+			console.log("auth err:" + err);
 			if(err) return callback(err);
 			if(!passwordCorrect) return callback(null, false);
 			return callback(null,user);
