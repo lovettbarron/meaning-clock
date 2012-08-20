@@ -1,7 +1,7 @@
 $(document).ready( function(){
 	$('.success').hide();
 	$('#bio').hide();
-	if( (document.URL).search("[login]{5}") > 1) {
+	if( (document.URL).search("[login]{5}") > 2) {
 		$('.desc').hide();
 	} else {
 		$('#login').hide();	
