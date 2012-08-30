@@ -77,9 +77,13 @@ passport.use(new LocalStrategy(
 
  passport.use(new LocalStrategy(
  	function(username, password, done) {
- 		User.findOne({ name: username, password: password }, function (err, user) {
-	 		if(err) console.log(err);
-	 		done(err, user);
+ 		console.log("Looking for " + username + " with pass" + password);
+ 		User.findOne({ name: username}, function (err, user) {
+ 			console.log('user! ' + JSON.stringify(user));
+			if(err) console.log(err);
+ 			if(!user) done(err,null);
+ 			if(User.authenticate(password,user.hash)) done(err, user);
+	 		
  		});
  	}
  ));
@@ -142,18 +146,18 @@ UserSchema.virtual('password').get( function() {
 	this._password = password;
 });*/
 
-UserSchema.method('checkPassword', function (password, hash, callback) {
-  bcrypt.compare(password, hash, callback);
+UserSchema.method('checkPassword', function (password, callback) {
+  bcrypt.compare(password, this.hash, callback);
 });
 
 UserSchema.static('authenticate', function(name,password,callback) {
 	console.log("Authenticating:" + name);
 	this.findOne( {name: name}, function(err,user) {
-		console.log("find err:" + err);
+		console.log("find err:" + err + " user " + user);
 		if(err) return callback(err);
 		if(!user) return callback(null, false);
 
-		user.checkPassword(user.password, user.hash, function(err, passwordCorrect) {
+		user.checkPassword(user.password, function(err, passwordCorrect) {
 			console.log("auth err:" + err);
 			if(err) return callback(err);
 			if(!passwordCorrect) return callback(null, false);
