@@ -224,7 +224,7 @@ app.get('/clock/api', ensureAuthenticated, function(req, res) {
 
 app.post('/clock/api', function(req, res) {
 			var newEntry = new Entry();
-			newEntry.userid = req.user.id;
+			newEntry.userid = req.user._id;
 			newEntry.duration = req.body.duration;
 			newEntry.meaning = req.body.meaning;
 			newEntry.date = new Date(req.body.date);
