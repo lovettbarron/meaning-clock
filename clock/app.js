@@ -82,7 +82,10 @@ passport.use(new LocalStrategy(
  			console.log('user! ' + JSON.stringify(user));
 			if(err) console.log(err);
  			if(!user) done(err,null);
- 			if(User.authenticate(password,user.hash)) done(err, user);
+ 			//if(User.authenticate(password,user.hash)) done(err, user);
+ 			User.authenticate(username,password, function(err,user) {
+ 				 done(err, user) 
+ 				}) ;
 	 		
  		});
  	}
@@ -147,6 +150,7 @@ UserSchema.virtual('password').get( function() {
 });*/
 
 UserSchema.method('checkPassword', function (password, callback) {
+	console.log("Checking password against " + this.hash);
   bcrypt.compare(password, this.hash, callback);
 });
 
@@ -156,8 +160,8 @@ UserSchema.static('authenticate', function(name,password,callback) {
 		console.log("find err:" + err + " user " + user);
 		if(err) return callback(err);
 		if(!user) return callback(null, false);
-
-		user.checkPassword(user.password, function(err, passwordCorrect) {
+		console.log("Checking " + name + " with " + password);
+		user.checkPassword(password, function(err, passwordCorrect) {
 			console.log("auth err:" + err);
 			if(err) return callback(err);
 			if(!passwordCorrect) return callback(null, false);
@@ -198,12 +202,12 @@ app.configure(function(){
 	app.use(express.methodOverride());
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: '024493' }));
+  	app.use(express.static(__dirname + '/public'));
+//	app.use(express.basicAuth('gobble','gobble')); // Setup password
+  	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 	app.use(passport.initialize());
 	app.use(passport.session());
 //  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-//	app.use(express.basicAuth('gobble','gobble')); // Setup password
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 
