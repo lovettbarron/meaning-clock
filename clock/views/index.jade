@@ -9,12 +9,14 @@ link(href='http://fonts.googleapis.com/css?family=Allerta', rel='stylesheet', ty
 	
 	#clock
 		img(src="img/clock.png")
-		h1 The Meaning Clock
-		.desc 
-			p The Meaning Clock is an interactive design object that allows people to easily (perhaps frustratingly) quantify the time they see as meaningful. It serves to challenge our need for structured and tracked time, and to force the question “What's meaningful for <span style="font-style: italic; font-weight: 800;">me</span>?" 
-			.runsOn Runs on iphone, tablet, and desktop
-				br
-				| Physical alarm clock coming soon!
+		.clockText
+			h1 The Meaning Clock
+			a.login(href='#') Login to the Meaning Clock
+			#desc 
+				p The Meaning Clock is an interactive design object that allows people to easily (perhaps frustratingly) quantify the time they see as meaningful. It serves to challenge our need for structured and tracked time, and to force the question “What's meaningful for <span style="font-style: italic; font-weight: 800;">me</span>?" 
+				.runsOn Runs on iphone, tablet, and desktop
+					br
+					| Physical alarm clock coming soon!
 
 			#request
 				h3 Signup for the meaning clock!
@@ -25,19 +27,16 @@ link(href='http://fonts.googleapis.com/css?family=Allerta', rel='stylesheet', ty
 					input#email(type='text', name='email', placeholder='your@email.com')
 					input#password(type='password', name='password', placeholder='password')
 					input#newRequest(type='submit',value='Register',style="display: inline")
-					| or <a href="#" class="login">login</a>
 				p.success Great, thank you! You can access the meaning clock at any time at <a href="/clock">ggg.st/clock</a>.
 		#login
-			a.backToHome(href="#") Register with g3 to track your meaningful hours
-			form(action='/login', method='post')
-				div
-					label Username
-					input(type='text', name='username', placeholder='Username')
-				div
-					label Password
-					input(type='password',name='password',placeholder='Password')
-				div
-					input(type='submit',value='Login')
+			h1 The Meaning Clock
+			p Don't have an account? 
+			p
+				a.backToHome(href="#") Register now!
+			form.request(action='/login', method='post')
+				input(type='text', name='username', placeholder='Username')
+				input(type='password',name='password',placeholder='Password')
+				input(type='submit',value='Login')
 
 
 	#bioExpand
@@ -46,11 +45,11 @@ link(href='http://fonts.googleapis.com/css?family=Allerta', rel='stylesheet', ty
 		#andrew
 			h1 Andrew Lovett-Barron
 			img(src="img/andrew.jpg")
-			p Andrew Lovett-Barron is a Toronto designer and principal of Relay, a design consultancy creating interactive experiences at a human scale. 
-			p He focuses on designing and developing with emerging technologies that foster connection, establish awareness, and adapt to context. Andrew is a graduate of the University of Toronto and an alumni of top agencies such as TAXI Advertising and Normative Design. 
-			<!-- p He organizes the Toronto Service Design Jam, cofounded the Handmade Music DIY concert series, and founded CityLenses, an psychogeographic running/reading group. Andrew also speaks and writes on design, prototyping, and technology, and teaches courses on computer vision with kinect and responsive applications. -->
+			p Andrew is a designer, technologist, and principal of Relay, a design consultancy creating interactive experiences at a human scale. 
+			p  Relay focuses on designing for computer vision and mobile technologies, which allow us to build interactive experiences for groups and crowds.
+			
 		#zahra
 			h1 Zahra Ebrahim
 			img(src="img/zahra.jpg")
-			p Zahra Ebrahim is the Founder and Principal of the design think tank and creative agency, archiTEXT.  
+			p Zahra is the Founder and Principal of the design think tank and creative agency, archiTEXT.  
 			p Born in Kenya, raised in Vancouver, and educated at McGill University in Montreal, she started archiTEXT at 22 years old as a place to bring together diverse groups to tackle the intersections of architecture and design with social change, to explore the impact of design and creativity on systems change, and to engage the public in a discourse of design and design thinking as a mechanism for creative problem solving.  

@@ -2,7 +2,7 @@ $(document).ready( function(){
 	$('.success').hide();
 	$('#bio').hide();
 	if( (document.URL).search("[login]{5}") > 2) {
-		$('.desc').hide();
+		$('.clockText').hide();
 	} else {
 		$('#login').hide();	
 	}
@@ -25,7 +25,7 @@ $(document).ready( function(){
 
 	$('a.login').click(function(e) {
 		e.preventDefault();
-		$('.desc').fadeOut(500, function() {
+		$('.clockText').fadeOut(500, function() {
 			$('#login').fadeIn(500);	
 		});
 		
@@ -33,7 +33,7 @@ $(document).ready( function(){
 	$('a.backToHome').click(function(e) {
 		e.preventDefault();
 		$('#login').fadeOut(500, function() {
-			$('.desc').fadeIn(500);
+			$('.clockText').fadeIn(500);
 		});
 	})
 });
