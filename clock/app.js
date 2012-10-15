@@ -262,5 +262,20 @@ app.delete('/clock/api/:id', function(req,res) {
 	})
 });
 
+app.post('/request', function(req, res) {
+
+	var newUser = new User();
+	newUser.name = req.body.name;
+	newUser.email = req.body.email;
+	newUser.password = req.body.password;
+	newUser.save( function(err) {
+
+		if(err) {
+			res.json('We had some trouble saving your account!')
+			console.log("Error saving new user: " + err);
+		}
+	});
+});
+
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
