@@ -134,7 +134,10 @@ passport.use(new LocalStrategy(
  		User.findOne({ name: username}, function (err, user) {
  			console.log('user! ' + JSON.stringify(user));
 			if(err) console.log(err);
- 			if(!user) done(err,null);
+ 			if(!user) {
+ 				app.redirect('/login');
+ 				done(err,null);
+ 				}
  			User.authenticate(username,password, function(err,user) {
  				 done(err, user) 
  				}) ;
@@ -200,8 +203,6 @@ app.get('/clock', ensureAuthenticated, function(req, res){
 	// 		req.session.id = doc._id
 	// 		req.session.userid = doc.userid;
 	// 	});
-
-  
 	
   res.render('entry', {
 	title: 'Clock'
@@ -212,7 +213,7 @@ app.get('/clock', ensureAuthenticated, function(req, res){
 
 app.get('/clock/api', ensureAuthenticated, function(req, res) {
 	console.log('Looking for ' + req.user._id)
-	return Entry.findOne({ 'userid': req.user._id }, function(err,doc) {
+	return Entry.find({ 'userid': req.user._id }, function(err,doc) {
 		console.log('Found stuff!' + doc );
 		if(!err){
 			return res.send(doc);
@@ -222,21 +223,21 @@ app.get('/clock/api', ensureAuthenticated, function(req, res) {
 	})
 });
 
-app.post('/clock/api', function(req, res) {
-			var newEntry = new Entry();
-			newEntry.userid = req.user._id;
-			newEntry.duration = req.body.duration;
-			newEntry.meaning = req.body.meaning;
-			newEntry.date = new Date(req.body.date);
+app.post('/clock/api', ensureAuthenticated, function(req, res) {
+	var newEntry = new Entry();
+	newEntry.userid = req.user._id;
+	newEntry.duration = req.body.duration;
+	newEntry.meaning = req.body.meaning;
+	newEntry.date = new Date(req.body.date);
 
-			newEntry.save( function(err) {
-				if(err) console.log("Error saving: " + err)
-				res.json('Saved');
-					});
+	newEntry.save( function(err) {
+		if(err) console.log("Error saving: " + err)
+		res.json('Saved');
+			});
 });
 
 // Modify meaning
-app.put('/clock/api/:id', function(req,res) {
+app.put('/clock/api/:id',ensureAuthenticated, function(req,res) {
 	return Entry.findById( req.params.id, function(err,doc) {
 		doc.meaning = req.body.meaning;
 		doc.duration = req.body.duration;
@@ -250,7 +251,7 @@ app.put('/clock/api/:id', function(req,res) {
 	})
 });
 
-app.delete('/clock/api/:id', function(req,res) {
+app.delete('/clock/api/:id',ensureAuthenticated, function(req,res) {
 	return Entry.findById( req.params.id, function(err,doc) {
 		return doc.remove(function(err) {
 			if(!err) {
@@ -263,7 +264,16 @@ app.delete('/clock/api/:id', function(req,res) {
 });
 
 app.post('/request', function(req, res) {
+/*			var newEntry = new Request();
+			newEntry.request = {
+					"email": req.body.email
+					, "username": req.body.username
+				};
 
+			newEntry.save( function(err) {
+				if(err) console.log("Error saving: " + err)
+				res.json('Saved');
+					}); */
 	var newUser = new User();
 	newUser.name = req.body.name;
 	newUser.email = req.body.email;
