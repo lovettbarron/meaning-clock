@@ -203,6 +203,7 @@ p,div {
 	div {
 		float: none;
 		clear: none;
+		padding-top: 30px;
 	}
 
 	#logo,#clock > img  {
@@ -230,6 +231,14 @@ p,div {
 		margin:  2em 0;
 	}
 
+	#login {
+		padding: 0;
+		position: static;
+		float: none; clear: both;
+		width: 100%;
+
+	}
+
 
 	#clock {
 		height: auto;
@@ -245,9 +254,10 @@ p,div {
 	#desc { 
 		width: 90%;
 		margin: 0 5% 0 0;
-		height: auto;
+		
 		float: none;
 		clear: both;
+		padding-bottom: 30px;
 	}
 
 	.clockText p {
@@ -269,7 +279,11 @@ p,div {
 	}
 
 	#bioExpand {
-
+		float: none; clear: both;
+		padding: 0;
+		margin: 0;
+		height: auto;
+		margin-top: 20px;
 	}
 
 	#bio div {
