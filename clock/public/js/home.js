@@ -28,7 +28,7 @@ $(document).ready( function(){
 	});
 
 	$('input#password').keypress(function(e) {
-		request();
+		if(e.keyCode == 13) request();
 	});
 
 	$('a.login').click(function(e) {
