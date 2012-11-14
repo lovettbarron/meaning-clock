@@ -200,6 +200,11 @@ p,div {
 ***************************/
 @media (max-width: 640px) {
 
+	div {
+		float: none;
+		clear: none;
+	}
+
 	#logo,#clock > img  {
 		float: left;
 		clear: both;
@@ -212,6 +217,7 @@ p,div {
 		clear: both;
 		width: 90%;
 		margin: 5%;
+		padding: 0;
 	}
 
 	.clockText {
