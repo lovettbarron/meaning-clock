@@ -286,6 +286,10 @@ p,div {
 		margin-top: 20px;
 	}
 
+	#clock h1 {
+		height: auto;
+	}
+
 	#bio div {
 		float: left; clear: both;
 		width: 100%%;
