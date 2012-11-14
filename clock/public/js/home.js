@@ -23,6 +23,14 @@ $(document).ready( function(){
 
 	});
 
+	$('input:not(#password)').keypress(function(e) {
+		if(e.keyCode == 13) $(this).next().focus();
+	});
+
+	$('input#password').keypress(function(e) {
+		request();
+	});
+
 	$('a.login').click(function(e) {
 		e.preventDefault();
 		$('.clockText').fadeOut(500, function() {

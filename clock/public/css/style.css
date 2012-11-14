@@ -336,6 +336,17 @@ input {
 	width: 95%;
 }
 
+#newRequest {
+	background: transparent;
+	color: #000;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 10px;
+	margin: 10px;
+	position: relative;
+	width: 95%;
+}
+
 .clockface {
 	text-align: center;
 	font-size: 2em;
@@ -377,4 +388,7 @@ input {
 #debug {
 	margin: 0;padding: 0px;
 	float: left; clear: none;
+}
+.error {
+	display: none;
 }
