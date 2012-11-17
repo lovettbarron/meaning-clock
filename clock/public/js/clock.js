@@ -369,7 +369,7 @@ var MeaningView = Backbone.View.extend({
  	}
 
 	, setColour: function() {
-		var lightness = ( ( MeaningList.getRank(this.model.cid) / 100 ) * 50) + 10;
+		var lightness = ( MeaningList.getRank(this.model.cid) / 100 );
 		var colour = MeaningList.getDay(this.model.cid) * 8;
 		console.log("CID: " + this.model.cid + " Colour: " + colour + " Lightness: " + lightness);
 		//console.log('color:' + colour);
