@@ -1,3 +1,36 @@
+
+body {
+	color: #f0f0f0;
+
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: 'Allerta', Helvetica, Arial, sans-serif;
+}
+ 
+p,div {
+	font-family: 'Crimson Text', Georgia, Times, serif;
+}
+
+#clock input {
+	margin: 10px 0 10px 0;
+}
+
+#menuButton {
+	position: absolute;
+	top: 5px; left: 5px;
+	width: auto;
+	height: 20px;
+}
+
+#meaningButton {
+	position: absolute;
+	top: 5px; right: 5px;
+	width: auto;
+	height: 20px;
+}
+
+
 /***************************
 	Mobile!
 ***************************/
@@ -5,11 +38,16 @@
 	body {
 		background-color: #313131;
 		padding: 0; margin: 0;
+		margin-top: 15px;
 		overflow-x: hidden;
 	}
 	
 	
 	div {
+		display: block;
+	}
+
+	#menuButton {
 		display: block;
 	}
 	
@@ -63,8 +101,7 @@
 
 	ul#meaningList {
 		margin: 0; padding: 0;
-		float:left;
-		clear: both;
+		
 	}
 
 	body > .container {
@@ -113,7 +150,7 @@
 		/*position: fixed;	
 		top:0; left: 20%;*/
 		z-index:999;
-		height: 60px;
+		height: 120px;
 		background: 1px solid rgba(0,0,0,.7);
 	}
 	
@@ -145,6 +182,16 @@
 	body > .container {
 		width: 960px;
 	}
+
+
+	#menuButton,  {
+		display: none;
+		
+	}
+	#meaningButton {
+		float: right;
+	}
+
 
 	#footer {
 		display: block;
@@ -193,6 +240,7 @@ a {
 #header {
 	display: block;
 	width: 100%;
+	margin: 0; padding: 0;
 }
 
 #header > .title {
@@ -391,4 +439,8 @@ input {
 }
 .error {
 	display: none;
+}
+
+.hide {
+	display: none!important;
 }

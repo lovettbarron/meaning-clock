@@ -1,15 +1,17 @@
 link(rel="apple-touch-icon", href="img/icon.png")
 script(src='/js/clock.js')
 
-
 #meaningClock.container.base
+	#menuButton
+		a.btn Menu
+
+	#meaningButton
+		a.btn.addOne Record time
 	#header
 		h1.title
 			#clockFace
 			| Meaning Clock
-		.menu
-			a.btn.addOne.pullRight.fullsize Add Meaningful Time
-			a.btn.addOne.pullRight.mobile Add Meaning
+		
 	#entryFormAnchor
 	#inviteToEnter
 	ul#meaningList
@@ -17,10 +19,13 @@ script(src='/js/clock.js')
 	#footer
 		#responseAnchor
 			h3
-			p Week view, month view, common words, basic language processing, fix database
-		#debug
-			p: a(href="/logout") Logout
-
+		ul.nav.nav-tabs.nav-stacked
+			li: a(href="#home") The Clock
+			li: a(href="#stats") Time Cards
+			li: a(href="#notes") Notes and ideas
+			li --
+			li: a(href="/logout") Log out
+			
 
 
 
@@ -39,7 +44,7 @@ script#meaning-item(type='text/template')
 	p
 		<%= meaning %> for <%= duration %> hours
 	.date.hide <%= date %>
-	input.edit(type="text", placeholder="<%= meaning %>").hide
+	input.edit(type="text", placeholder="meaning").hide
 
 script#blankMeaning(type='text/template')
 	div

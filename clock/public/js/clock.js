@@ -63,7 +63,7 @@ function arrayRandomize(array) {
 				return "Duration must be a number"
 			}
 		}
-
+		
 	});
 
 
@@ -370,7 +370,7 @@ var MeaningView = Backbone.View.extend({
 
 	, setColour: function() {
 		var lightness = ( ( MeaningList.getRank(this.model.cid) / 100 ) * 50) + 10;
-		var colour = MeaningList.getDay(this.model.cid) * 200;
+		var colour = MeaningList.getDay(this.model.cid) * 8;
 		console.log("CID: " + this.model.cid + " Colour: " + colour + " Lightness: " + lightness);
 		//console.log('color:' + colour);
 		//console.log('Day:' + MeaningList.getDay(this.model.cid));
