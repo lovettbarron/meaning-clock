@@ -92,24 +92,25 @@ function arrayRandomize(array) {
 			// Okay, I think this is a not great hack, but not sure how to do preprocessing
 			// I'm checking to see if the thing has been checked and then populates the array.
 			// There should be other checking too, like for additions and re-rendering and such.
-			if(!this.postsIndex) this.populateIndex();
-			if(reverse == undefined) reverse=true;
-			var index = cid.split('c')[1];
-			var currentDay = new Date(this.getByCid(cid).get('date')).getDate();
-			var lengthOfDay = this.postsIndex[currentDay];
-			var prevSubtr = 0;
-			for(var key in this.postsIndex) {
-				if( key < currentDay ) {
-					if(this.postsIndex[key]) {
-						prevSubtr += this.postsIndex[key]
-					}
-				}
-			}
-			console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
-			// Bad hack time
-			if(index >= this.length*1.5) index = this.length;
-			return parseInt( (index-prevSubtr) * (100 / lengthOfDay) );
-			
+			// if(!this.postsIndex) this.populateIndex();
+			// if(reverse == undefined) reverse=true;
+			// var index = cid.split('c')[1];
+			// var currentDay = new Date(this.getByCid(cid).get('date')).getDate();
+			// var lengthOfDay = this.postsIndex[currentDay];
+			// var prevSubtr = 0;
+			// for(var key in this.postsIndex) {
+			// 	if( key < currentDay ) {
+			// 		if(this.postsIndex[key]) {
+			// 			prevSubtr += this.postsIndex[key]
+			// 		}
+			// 	}
+			// }
+			// console.log('Subtracting ' + prevSubtr + ' from ' + index + ' with length ' + lengthOfDay)
+			// // Bad hack time
+			// if(index >= this.length*1.5) index = this.length;
+			// //return parseInt( (index-prevSubtr) * (100 / lengthOfDay) );
+			// return Math.abs(prevSubtr - index) / lengthOfDay;
+			return .6;
 		}
 		, getDay: function(cid) {
 				return parseInt( new Date(this.getByCid(cid).get('date')).getDate());
@@ -369,7 +370,7 @@ var MeaningView = Backbone.View.extend({
  	}
 
 	, setColour: function() {
-		var lightness = ( MeaningList.getRank(this.model.cid) / 100 );
+		var lightness = 70//( MeaningList.getRank(this.model.cid) );
 		var colour = MeaningList.getDay(this.model.cid) * 8;
 		console.log("CID: " + this.model.cid + " Colour: " + colour + " Lightness: " + lightness);
 		//console.log('color:' + colour);
