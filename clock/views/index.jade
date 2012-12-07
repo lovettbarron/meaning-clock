@@ -24,10 +24,15 @@ link(href='http://fonts.googleapis.com/css?family=Allerta', rel='stylesheet', ty
 				
 				form.form.request
 					.error We need all three of these guys!
+					br
+					label You'll use your username and password
 					input#username(type='text', name='name', placeholder='username')				
-					input#email(type='text', name='email', placeholder='your@email.com')
 					input#password(type='password', name='password', placeholder='password')
+					label We'll use your email to get in touch!
+					input#email(type='text', name='email', placeholder='your@email.com')
+
 					input#newRequest(type='submit',value='Register',style="display: inline")
+
 
 				p.success Great, thank you! You can access the meaning clock at any time at <a href="/clock">ggg.st/clock</a>.
 		#login
