@@ -22,7 +22,6 @@ function clockSetup() {
 		if(sec%2 == 0) { flash = 'On'; } 
 		else { flash = 'Off'; }
 		left = 24 - time.getHours()
-		output = hour + '<span class="flash' + flash + '">:</span>' + min;
 		window.clock = output;
 		// + '<h3>You have ' + left + ' hours in the day left.</h3>';
   	$('#clockFace').html(window.clock);
@@ -307,6 +306,7 @@ function arrayRandomize(array) {
 			} else {
 				$(this.el).hide().html(this.failTemplate).slideDown(700);
 			}
+			this.setColour();
 		}
 		, saveOnClick: function(e) {
 			this.save();
@@ -334,6 +334,17 @@ function arrayRandomize(array) {
 				});
 				this.done();
 			}
+		}
+		, setColour: function() {
+		var lightness = 70//( MeaningList.getRank(this.model.cid) );
+		var colour = parseInt( new Date().getDate()) * 8;
+		
+		$('#entry').css({
+			'background-color':'hsl( ' + colour + ', 60%, ' //154,70%,n% original
+				+  lightness  + '%)'
+				, 'opacity': 1});
+				
+		return this;
 		}
 		, focusDuration: function(e) {
 			if(e.keyCode == 13)
