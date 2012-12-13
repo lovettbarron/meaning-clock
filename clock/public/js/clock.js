@@ -444,10 +444,13 @@ var MeaningView = Backbone.View.extend({
 		, events: {
 			'click .addOne' : 'enterMeaning'
 			, 'click .removeAll' : 'resetCollection'
+			, 'tap .menuBtn'	: 'activateMenu'
+			, 'click .menuBtn'	: 'activateMenu'
 		}
 	
 		, initialize: function() {
 			this.clockView = new ClockView();
+			this.menuOpen = false;
 			MeaningList.bind('add', this.addOne, this);
 			MeaningList.bind('reset', this.addAll, this);
 			MeaningList.bind('all', this.render, this);
@@ -464,6 +467,19 @@ var MeaningView = Backbone.View.extend({
 			var response = new responseView();
 		}
 		
+		, activateMenu: function() {
+			if(!this.menuOpen)
+				$('#main').animate({
+					marginLeft:'40%'
+					, opacity: '.6'
+				},400);
+			else
+				$('#main').animate({
+					marginLeft:'0'
+					, opacity: '1'
+				},400);
+		}
+
 		, enterMeaning: function() {
 			if(!this.entryView)
 				this.entryView = new DataEntryView();

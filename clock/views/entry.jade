@@ -2,23 +2,26 @@ link(rel="apple-touch-icon", href="img/icon.png")
 script(src='/js/clock.js')
 
 #meaningClock.container
-	#menuButton
-		a.btn Menu
+	#main
+		#menuButton
+			a.btn.menuBtn
+				img(src='img/menu.png')
 
-	#meaningButton
-		a.btn.addOne Record time
-	#header
-		h1.title
-			#clockFace
-			| Meaning Clock
-		
-	#entryFormAnchor
-	#inviteToEnter
-	ul#meaningList
+		#meaningButton
+			a.btn.addOne 
+				img(src='img/add.png')
+		#header
+			h1.title
+				#clockFace
+				| Meaning Clock
+		#responseAnchor
+			h3	
+		#entryFormAnchor
+		#inviteToEnter
+		ul#meaningList
 
 	#footer
-		#responseAnchor
-			h3
+		
 		ul.nav.nav-tabs.nav-stacked
 			li: a(href="#home") The Clock
 			li: a(href="#stats") Time Cards

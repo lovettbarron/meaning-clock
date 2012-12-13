@@ -281,7 +281,7 @@ app.post('/request', function(req, res) {
 	newUser.save( function(err) {
 
 		if(err) {
-			res.json('We had some trouble saving your account!')
+			res.send('We had some trouble saving your account!')
 			console.log("Error saving new user: " + err);
 		}
 	});
