@@ -44,9 +44,14 @@ $(function() {
 			$('#main').children().fadeIn();
 			this.deactivate();
 		}
+
 		, notes: function() {
-			$(app.main.el).fadeOut();
-			app.main = app.notesView();
+			$('#main').children().fadeOut();
+			if(app.notes != undefined)
+				app.focus = app.notes.render();
+			else app.focus = app.notes = new app.notesView();
+			$('#main').children().fadeIn();
+			this.deactivate();
 		}
 		, logout: function() {
 

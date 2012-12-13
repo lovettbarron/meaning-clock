@@ -1,27 +1,22 @@
 var app = app || {};
 
 $(function() {
-	app.inviteView = Backbone.View.extend({
-		el: $('#inviteToEnter')
-		, template: _.template($("#blankMeaning").html())
+	app.notesView = Backbone.View.extend({
+		el: $('#main')
+		, template: _.template($("#notesTemplate").html())
 		, events: {
-			'click': 'done'
+
 		}
 	
 		, initialize: function() {
-			this.bind('entryViewDown', this.done, this);
-			this.render;
+			this.render();
 
 		}
 		
 		, render: function() {
-			console.log("Rendering invite");
+			console.log("Rendering notes");
 		  	$(this.el).html(this.template);
 			return this;
-		}
-		, done: function() {
-			this.$el.slideUp(100).remove();
-			app.AppView.enterMeaning();
 		}
 	})
 

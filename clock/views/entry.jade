@@ -26,16 +26,20 @@ script#statsTemplate(type='text/template')
 	#mainOverlay
 	a.btn.menuBtn
 		img(src='img/menu.png')
-	a.btn.addOne
-		img(src='img/add.png')
 	#header
 		#clockFace.title
 			| Meaning Clock
-	ul.stats
-		li.totalTime
-		li.percentMeaningful
-		li.keyWords
+	h1 Stats placeholder
 
+
+script#notesTemplate(type='text/template')
+	#mainOverlay
+	a.btn.menuBtn
+		img(src='img/menu.png')
+	#header
+		#clockFace.title
+			| Meaning Clock
+	h1 Notes and feedback placeholder
 
 
 script#menuTemplate(type='text/template')
@@ -117,6 +121,7 @@ script(src='/js/view/inviteView.js')
 script(src='/js/view/meaningView.js')
 script(src='/js/view/menuView.js')
 script(src='/js/view/statsView.js')
+script(src='/js/view/notesView.js')
 script(src='/js/view/mainView.js')
 
 script(src='/js/view/appView.js')

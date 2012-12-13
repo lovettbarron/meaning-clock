@@ -15,20 +15,21 @@ $(function() {
 			this.postsIndex = this.postsPerDay();
 			return this;
 		}
+
 		, sortDays: function() {
-			
+			return 0	
 		}
 
 		, totalMissed: function() {
-			this.without.apply( this, this.completed() 
+			return 0
 		}
 
 		, totalEntry: function() {
-			return this.
+			return 0
 		}
 
 		, totalDay: function() {
-			return this.pluck('date');.length();
+			return 0
 		}
 
 		, colourStep: function() {
