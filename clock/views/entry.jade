@@ -1,46 +1,64 @@
-link(rel="apple-touch-icon", href="img/icon.png")
-script(src='/js/clock.js')
-
 #meaningClock.container
 	#main
-		#menuButton
-			a.btn.menuBtn
-				img(src='img/menu.png')
 
-		#meaningButton
-			a.btn.addOne 
-				img(src='img/add.png')
-		#header
-			h1.title
-				#clockFace
-				| Meaning Clock
-		#responseAnchor
-			h3	
-		#entryFormAnchor
-		#inviteToEnter
-		ul#meaningList
-
-	#footer
-		
-		ul.nav.nav-tabs.nav-stacked
-			li: a(href="#home") The Clock
-			li: a(href="#stats") Time Cards
-			li: a(href="#notes") Notes and ideas
-			li --
-			li: a(href="/logout") Log out
+	#menu.nav
 			
 
 
-
-
 <!-- templates -->
+script#mainTemplate(type='text/template')
+	#mainOverlay
+	a.btn.menuBtn
+		img(src='img/menu.png')
+	a.btn.addOne
+		img(src='img/add.png')
+	#header
+		#clockFace.title
+			| Meaning Clock
+	#responseAnchor
+	#entryFormAnchor
+	#inviteToEnter
+	ul#meaningList
+
+
+
+script#statsTemplate(type='text/template')
+	#mainOverlay
+	a.btn.menuBtn
+		img(src='img/menu.png')
+	a.btn.addOne
+		img(src='img/add.png')
+	#header
+		#clockFace.title
+			| Meaning Clock
+	ul.stats
+		li.totalTime
+		li.percentMeaningful
+		li.keyWords
+
+
+
+script#menuTemplate(type='text/template')
+	ul.nav.nav-tabs.nav-stacked
+		li: a.main(href="#home") The Clock
+		li: a.stats(href="#stats") Stats
+		li: a.notes(href="#notes") Notes and ideas
+		li --
+		li: a.logout(href="/logout") Log out
+
+
+
 script#meaning-list(type='text/template')
+
+
 
 script#dayView(type='text/template')
 	ul.stats
 		li.totalTime
 		li.percentMeaningful
 		li.keyWords
+
+
 
 script#meaning-item(type='text/template')
 	a.btn.hide.delete.onHover.pull-right x
@@ -49,29 +67,57 @@ script#meaning-item(type='text/template')
 	.date.hide <%= date %>
 	input.edit(type="text", placeholder="meaning").hide
 
+
+
 script#blankMeaning(type='text/template')
 	div
 		a.btn.hide.delete.onHover.pull-right add Meaning
 		h1 Have you done anything meaningful today?
 
+
+
 script#clock(type='text/template')
+
+
 
 script#dataEntry(type='text/template')
 	#entry.form
 		input#meaningEntry(type='text', placeholder='How did you spend your time?')
 		input#meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
 		a#submit.btn.btn-primary Submit!
+
 script#noDataEntry(type='text/template')
 	#entryFail
 		h2 Sorry, but there are only 24 hours in a day. 
 		p Correct your time for today if you want to fill in more meaningful time
+
 script#noContentEntry(type='text/template')
 	#entryFail
 		h2 Sorry, but that time needs meaning. 
 		p What kind of time makes you happy or leaves you feeling good about your life?
 		p Give us an hour or two of that!
 
+
+
 script#responsePane(type='text/template')
 	#responsePane
 		.response <%= response %>
 		a.btn.delete.hide.onHover x
+
+
+
+script(src='/js/utils.js')
+script(src='/js/model/meaningModel.js')
+script(src='/js/collection/meaningCollection.js')
+
+script(src='/js/view/inputView.js')
+script(src='/js/view/clockView.js')
+script(src='/js/view/responseView.js')
+script(src='/js/view/inviteView.js')
+script(src='/js/view/meaningView.js')
+script(src='/js/view/menuView.js')
+script(src='/js/view/statsView.js')
+script(src='/js/view/mainView.js')
+
+script(src='/js/view/appView.js')
+script(src='/js/app.js')

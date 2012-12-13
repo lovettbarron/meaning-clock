@@ -409,7 +409,6 @@ var MeaningView = Backbone.View.extend({
 		return this;
 	}
 	, edit: function() {
-		alert('Triggering edit mode')
 		$(this.el).addClass("editing");
       this.input.focus();
 		}
@@ -468,16 +467,16 @@ var MeaningView = Backbone.View.extend({
 		}
 		
 		, activateMenu: function() {
-			if(!this.menuOpen)
+			if(!this.menuOpen) {
 				$('#main').animate({
 					marginLeft:'40%'
-					, opacity: '.6'
 				},400);
-			else
+				$('#mainOverlay').fadeIn(400);
+			} else {
 				$('#main').animate({
 					marginLeft:'0'
-					, opacity: '1'
 				},400);
+				$('#mainOverlay').fadeOut(400); }
 		}
 
 		, enterMeaning: function() {
