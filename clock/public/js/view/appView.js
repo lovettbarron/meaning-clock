@@ -5,8 +5,8 @@ $(function( $ ) {
 		el: $("#meaningClock")
 		
 		, events: {
-			'click .addOne' : 'enterMeaning'
-			, 'click .removeAll' : 'resetCollection'
+			
+			'click .removeAll' : 'resetCollection'
 			, 'tap .menuBtn'	: 'activateMenu'
 			, 'click .menuBtn'	: 'activateMenu'
 		}
@@ -23,8 +23,6 @@ $(function( $ ) {
 			app.main = new app.mainView();
 			app.main.initialize();
 			app.focus = app.main;
-			
-			app.response = new app.responseView();
 
 		}
 
@@ -32,14 +30,6 @@ $(function( $ ) {
 			app.menu.activate();
 		}
 
-		, enterMeaning: function() {
-			if(!this.entryView)
-				this.entryView = new app.DataEntryView();
-			else {
-				this.entryView.initialize();
-			}
-		}
-		
 		, resetCollection: function() {
  			alert('Remove test data?', function() {
 				MeaningList.reset();

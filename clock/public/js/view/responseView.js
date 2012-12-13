@@ -9,6 +9,7 @@ $(function() {
 		},
 		initialize: function() {
 			app.MeaningList.bind('change', this.render, this);
+			
 			this.render()
 		}
 		, render: function() {

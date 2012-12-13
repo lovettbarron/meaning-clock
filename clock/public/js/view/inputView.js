@@ -1,7 +1,7 @@
 var app = app || {};
 
 $(function() {
-	app.DataEntryView = Backbone.View.extend({
+	app.inputView = Backbone.View.extend({
 		el: $('#entryFormAnchor')
 		, enterTemplate: _.template($('#dataEntry').html())
 		, failTemplate: _.template($('#noDataEntry').html())
@@ -14,13 +14,13 @@ $(function() {
 		}
 		
 		, initialize: function() {
-//			$el.html(this.template);
+			console.log("Trigering input")
 			if(app.MeaningList.timeLeftToday() > 0) {
 				$(this.el).hide().html(this.enterTemplate).trigger('entryViewDown').slideDown(700);
 			} else {
 				$(this.el).hide().html(this.failTemplate).slideDown(700);
 			}
-			this.setColour();
+			this.setColour().render();
 		}
 		, saveOnClick: function(e) {
 			this.save();
