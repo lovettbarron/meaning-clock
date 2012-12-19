@@ -85,9 +85,9 @@ $(function() {
 		, render: function() {
 			console.log('Rendering input view');
 			if(app.MeaningList.timeLeftToday() > 0) {
-				$('#inputAnchor').hide().html( $(this.el).html(this.enterTemplate) ).trigger('entryViewDown').slideDown(700);
+				$(this.el).hide().html( this.enterTemplate ).trigger('entryViewDown').slideDown(700);
 			} else {
-				$('#inputAnchor').hide().html( $(this.el).html(this.failTemplate) ).slideDown(700);
+				$(this.el).hide().html( this.failTemplate ).slideDown(700);
 			}
 			this.setColour();
 			return this;

@@ -18,8 +18,8 @@ $(function( $ ) {
 			app.menu = new app.menuView();
 			app.main = new app.mainView();
 
-			app.response = new app.responseView();
-			app.input = new app.inputView();
+			app.response = new app.responseView({ el: this.$("#responseAnchor") });
+			app.input = new app.inputView({ el: this.$("#inputAnchor") });
 			app.invite = new app.inviteView();
 
 
