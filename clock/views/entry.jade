@@ -1,6 +1,5 @@
 #meaningClock.container
 	#main
-
 	#menu.nav
 			
 
@@ -15,11 +14,10 @@ script#mainTemplate(type='text/template')
 	#header
 		#clockFace.title
 			| Meaning Clock
-		.stats Total time: <span></span>
-
+		.stats Meaning Score: <span></span>%
 	#responseAnchor
-	#entryFormAnchor
 	#inviteToEnter
+	#inputAnchor
 	ul#meaningList
 
 
@@ -55,7 +53,7 @@ script#menuTemplate(type='text/template')
 
 
 script#meaning-list(type='text/template')
-
+	div
 
 
 script#dayView(type='text/template')
@@ -88,9 +86,10 @@ script#clock(type='text/template')
 
 script#dataEntry(type='text/template')
 	#entry.form
-		input#meaningEntry(type='text', placeholder='How did you spend your time?')
-		input#meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
-		a#submit.btn.btn-primary Submit!
+		input.meaningEntry(type='text', placeholder='How did you spend your time?')
+		input.meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
+		a.submit.btn.btn-primary Submit!
+		a.cancel.btn Cancel
 
 script#noDataEntry(type='text/template')
 	#entryFail

@@ -5,25 +5,32 @@ $(function( $ ) {
 		el: $("#meaningClock")
 		
 		, events: {
-			
 			'click .removeAll' : 'resetCollection'
 			, 'tap .menuBtn'	: 'activateMenu'
 			, 'click .menuBtn'	: 'activateMenu'
+			, 'click .submit' : 'submit'
 		}
 	
 		, initialize: function() {
 			this.clockView = new app.ClockView();
-			this.menuOpen = false;
-
 			app.MeaningList = new app.MeaningCollection();
 
 			app.menu = new app.menuView();
-			app.menu.initialize();
-
 			app.main = new app.mainView();
-			app.main.initialize();
+
+			app.response = new app.responseView();
+			app.input = new app.inputView();
+			app.invite = new app.inviteView();
+
+
 			app.focus = app.main;
 
+			this.bind('all', this.logEvent, this);
+
+		}
+
+		, logEvent: function(arg) {
+			console.log("new event:" + arg)
 		}
 
 		, activateMenu: function() {

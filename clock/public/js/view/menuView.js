@@ -31,6 +31,7 @@ $(function() {
 			if(app.main != undefined)
 				app.focus = app.main.render();
 			else app.focus = app.main() = new app.mainView();
+			_.bindAll(app.main);
 			//$(app.focus.el).fadeIn();
 			$('#main').children().fadeIn();
 			this.deactivate();

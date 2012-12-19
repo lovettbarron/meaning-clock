@@ -5,11 +5,10 @@ $(function() {
 		el: $('#responseAnchor')
 		, template: _.template($('#responsePane').html())
 		, events: {
-		'click':'render'	
+			'click':'render'	
 		},
 		initialize: function() {
 			app.MeaningList.bind('change', this.render, this);
-			
 			this.render()
 		}
 		, render: function() {
@@ -62,7 +61,7 @@ $(function() {
 			return response;
 		}
 		, done: function() {
-			$(this.el).slideUp(100);
+			//$(this.el).slideUp(100);
 		}
 	})
 	

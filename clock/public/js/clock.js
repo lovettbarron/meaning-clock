@@ -293,9 +293,9 @@ function arrayRandomize(array) {
 		, failTemplate: _.template($('#noDataEntry').html())
 		, noContentTemplate: _.template($('#noContentEntry').html())
 		, events: {
-			'click #submit' : 'saveOnClick'
-			, 'keypress #meaningDuration' : 'saveOnEnter'
-			, 'keypress #meaningEntry' : 'focusDuration'
+			'click .submit' : 'saveOnClick'
+			, 'keypress .meaningDuration' : 'saveOnEnter'
+			, 'keypress .meaningEntry' : 'focusDuration'
 		//	, 'keypress #meaningDuration' : 'saveEntry'
 		}
 		
@@ -316,9 +316,9 @@ function arrayRandomize(array) {
 			this.save();
 		}
 		, save: function() {
-			var proposedTime = MeaningList.timeLeftToday() - $('#meaningDuration').val();
-			if(!$('#meaningDuration').val()) return;
-			if(!$('#meaningEntry').val()) {
+			var proposedTime = MeaningList.timeLeftToday() - $('.meaningDuration').val();
+			if(!$('.meaningDuration').val()) return;
+			if(!$('.meaningEntry').val()) {
 				$(this.el).slideUp(100).html(this.noContentTemplate).slideDown(700);
 				return;
 			} 
@@ -329,8 +329,8 @@ function arrayRandomize(array) {
 				MeaningList.create({
 					_id: null
 					, date: new Date()
-					, meaning: $('#meaningEntry').val()
-					, duration: $('#meaningDuration').val()
+					, meaning: $('.meaningEntry').val()
+					, duration: $('.meaningDuration').val()
 				});
 				this.done();
 			}
@@ -348,7 +348,7 @@ function arrayRandomize(array) {
 		}
 		, focusDuration: function(e) {
 			if(e.keyCode == 13)
-				$('#meaningDuration').focus();
+				$('.meaningDuration').focus();
 		}
 		, done: function() {
 			$(this.el).slideUp(100);
