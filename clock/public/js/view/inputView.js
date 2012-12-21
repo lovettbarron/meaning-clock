@@ -11,6 +11,7 @@ $(function() {
 			, 'click .cancel' : 'done'
 			, 'keypress .meaningDuration' : 'saveOnEnter'
 			, 'keypress .meaningEntry' : 'focusDuration'
+			, 'click .isPast' : 'pastTime'
 
 		//	, 'keypress #meaningDuration' : 'saveEntry'
 		}
@@ -28,6 +29,13 @@ $(function() {
 			this.render();
 			this.delegateEvents();
 		}
+
+		, pastTime: function() {
+			
+			$('.isPast').fadeOut();
+			$('.howLongAgo').fadeIn();
+		}
+
 		, saveOnClick: function(e) {
 			//alert('cur' + this.el);
 			this.save();
@@ -57,9 +65,14 @@ $(function() {
 					return;
 				}
 			// Allgood?
+
+			var hours = $('.howLongAgo').val();
+			//var curDate = new Date();
+			//var difDate = new Date(curDate.setHours() - 1);
+			//difDate = new Date(difDate).setHours(hours);
 			app.MeaningList.create({
 				_id: null
-				, date: new Date()
+				, date: new Date().setHours( new Date().getHours() - (24-hours) )
 				, meaning: $('.meaningEntry').val()
 				, duration: $('.meaningDuration').val()
 			});
@@ -85,7 +98,7 @@ $(function() {
 		, render: function() {
 			console.log('Rendering input view');
 			if(app.MeaningList.timeLeftToday() > 0) {
-				$(this.el).hide().html( this.enterTemplate ).trigger('entryViewDown').slideDown(700);
+				$(this.el).hide().click('a.toTop').html( this.enterTemplate ).trigger('entryViewDown').slideDown(700);
 			} else {
 				$(this.el).hide().html( this.failTemplate ).slideDown(700);
 			}

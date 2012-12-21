@@ -14,6 +14,18 @@ p,div {
 	font-family: 'Crimson Text', Georgia, Times, serif;
 }
 
+.submit {
+	clear: left;
+}
+
+.date {
+	width: 100%;
+	text-align: right;
+	font-weight: 100;
+	width: auto;
+	margin-right: 10px;
+}
+
 #clock input {
 	margin: 10px 0 10px 0;
 }
@@ -27,14 +39,71 @@ p,div {
 }
 
 #meaningButton {
-	float: right; clear: right;
-	position: absolute;
-	top: 5px; right: 5px;
-	width: auto;
-	height: 20px;
+	bottom: 0; left: 0;
+	position: fixed;
+	width: 100%;
+	height: auto;
+	border: 0;
+	background: transparent;
 }
 
+#meaningButton .back {
+	position:absolute;
+	bottom: 0; left: 0;
+	width: 100%;
+	height: 20px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(rgba(0,0,0,.8)));
+	background: -webkit-linear-gradient(top, transparent, rgba(0,0,0,.8));
+	background: -moz-linear-gradient(top, transparent, rgba(0,0,0,.8));
+	background: -ms-linear-gradient(top, transparent, rgba(0,0,0,.8));
+	background: -o-linear-gradient(top, transparent, rgba(0,0,0,.8));
+	z-index: 998;
+}
 
+#meaningButton img {
+	height: auto;
+	z-index: 999;
+	 -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.8);
+}
+
+a.toTop {
+	display: none;
+	position: absolute;
+	top: 0; right: 0;
+	width: 10%; height: 10%;
+	background
+	border: 0;
+	background: transparent;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0,0,0.8)), to(transparent));
+	background: -webkit-linear-gradient(top, rgba(0,0,0,.8), transparent));
+	background: -moz-linear-gradient(top, rgba(0,0,0,.8), transparent));
+	background: -ms-linear-gradient(top, rgba(0,0,0,.8), transparent));
+	background: -o-linear-gradient(top, rgba(0,0,0,.8), transparent));
+}
+
+.meaningDuration {
+	width: 40%;
+}
+
+.past {
+	display: inline;
+	width: 40%;
+	height: auto;
+}
+
+.past input {
+	width: 20px;
+	font-size: 2em;
+}
+
+select.howLongAgo {
+	display: none;
+	width: 20%;
+}
 /***************************
 	Mobile!
 ***************************/
@@ -190,7 +259,7 @@ li.meaning-item {
 }
 
 li.meaning-item > p {
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 	color: #f0f0f0;
 	font-size: 1.1em;
 	font-weight: bold;

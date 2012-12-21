@@ -71,7 +71,17 @@ $(function() {
 		$(this.el).slideUp(300);
 	}
  	, render: function() {
-		this.$el.hide().html(this.template(this.model.toJSON())).slideDown();
+ 		this.output = this.model.toJSON();
+
+ 		// Date namer thing
+ 		if( new Date(this.output.date).getDay() === new Date().getDay() )
+ 			this.output.date = "Todayat " + (new Date(this.output.date).getHours())  + "00 ish";
+ 		else if ( new Date(this.output.date).getDay() === (new Date().getDay()) - 1)
+ 			this.output.date = "Yesterday at " + (new Date(this.output.date).getHours())  + "00 ish";
+ 		else
+ 			this.output.date = '' + (new Date(this.output.date).toDateString());
+
+		this.$el.hide().html(this.template(this.output)).slideDown();
 		this.input = this.$('.edit');
 		return this;
  	}

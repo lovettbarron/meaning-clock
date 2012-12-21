@@ -9,8 +9,6 @@ script#mainTemplate(type='text/template')
 	#mainOverlay
 	a.btn.menuBtn
 		img(src='img/menu.png')
-	a.btn.addOne
-		img(src='img/add.png')
 	#header
 		#clockFace.title
 			| Meaning Clock
@@ -19,6 +17,10 @@ script#mainTemplate(type='text/template')
 	#inviteToEnter
 	#inputAnchor
 	ul#meaningList
+	a.toTop(href='#') To top
+	a#meaningButton.btn.addOne
+		.back
+		img(src='img/add.png')
 
 
 
@@ -68,7 +70,7 @@ script#meaning-item(type='text/template')
 	a.btn.hide.delete.onHover.pull-right x
 	p
 		<%= meaning %> for <%= duration %> hours
-	.date.hide <%= date %>
+	.date <%= date %>
 	input.edit(type="text", placeholder="meaning").hide
 
 
@@ -88,6 +90,11 @@ script#dataEntry(type='text/template')
 	#entry.form
 		input.meaningEntry(type='text', placeholder='How did you spend your time?')
 		input.meaningDuration(type='text', pattern='[0-9]*', placeholder='How many hours did you spend?')
+		a.btn.isPast Yesterday?
+		select.howLongAgo(style='display:none')
+			- for (var i=1;i<24;++i) {
+				option(id=i)= i
+			-}
 		a.submit.btn.btn-primary Submit!
 		a.cancel.btn Cancel
 

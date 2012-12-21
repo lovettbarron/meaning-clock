@@ -1,3 +1,15 @@
+function utils() {
+
+$('a.toTop').click(function() {
+	console.log("to top");
+	$("html, body").animate({ scrollTop: 0 }, "slow");
+	return false;
+});
+
+$(document).scrollTop() > 100 ? $('a.toTop').fadeIn() : $('a.toTop').fadeOut();
+
+};
+
 Backbone.View.prototype.close = function () {
     if (this.beforeClose) {
         this.beforeClose();
@@ -29,6 +41,8 @@ function clockSetup() {
 function arrayRandomize(array) {
 	return Math.floor(Math.random() * array.length)
 }
+
+
 
 // function stopScrolling( touchEvent ) { 
 // 	touchEvent.preventDefault();

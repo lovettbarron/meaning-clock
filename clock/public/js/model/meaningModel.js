@@ -23,6 +23,7 @@ $(function() {
 		, toggle: function() {
 //      this.save({done: !this.get("done")});
 		}
+
 		, validate: function(attrs) {
 			if(isNaN(attrs.duration)) {
 				console.log("Duration must be a number")
